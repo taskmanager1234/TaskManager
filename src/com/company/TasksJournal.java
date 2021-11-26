@@ -6,6 +6,10 @@ import java.util.List;
 public class TasksJournal {
     private List<Task> tasks;
 
+    public TasksJournal(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
 
     public List<Task> getTasks() {
         return tasks;
@@ -36,6 +40,6 @@ public class TasksJournal {
     public String toString() {
         return "TasksJournal{" +
                 "task=" + tasks +
-                '}';
+                "}";
     }
 }
