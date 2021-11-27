@@ -7,6 +7,7 @@ public class Task {
     private String description;
     private Date startDate;
     private Date endDate;
+    //private Date
 
 
     public Task(String title, String description, Date startDate, Date endDate) {

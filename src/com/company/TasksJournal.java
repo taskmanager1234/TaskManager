@@ -10,6 +10,10 @@ public class TasksJournal {
         this.tasks = tasks;
     }
 
+    public TasksJournal(){
+        this.tasks = new ArrayList<>();
+    }
+
 
     public List<Task> getTasks() {
         return tasks;

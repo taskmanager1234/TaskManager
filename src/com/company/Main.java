@@ -1,5 +1,7 @@
 package com.company;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,11 +14,10 @@ public class Main {
         System.out.println(task);
         task.setDescription("Sun");
 
-        ArrayList<Task> list = new ArrayList<>();
-        list.add(task);
-        list.add(task2);
-        TasksJournal tasksJournal = new TasksJournal(list);
-        System.out.println(tasksJournal.toString());
 
+        TasksJournal tasksJournal = new TasksJournal();
+        tasksJournal.addTask(task);
+        tasksJournal.addTask(task2);
+        System.out.println(tasksJournal.toString());
     }
 }
