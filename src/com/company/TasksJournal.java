@@ -1,9 +1,10 @@
 package com.company;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TasksJournal {
+public class TasksJournal implements Serializable {
     private List<Task> tasks;
 
     public TasksJournal(List<Task> tasks) {

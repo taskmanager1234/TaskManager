@@ -1,11 +1,16 @@
 package com.company;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class Task {
+public class Task implements Serializable {
     private String title;
     private String description;
+    @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
     private Date startDate;
+    @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
     private Date endDate;
     //private Date
 
@@ -15,6 +20,9 @@ public class Task {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Task() {
     }
 
 
