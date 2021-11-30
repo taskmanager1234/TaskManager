@@ -24,10 +24,12 @@ public class JsonSerializer implements Serializer {
 
     public TasksJournal deserialize(Object o) throws JsonProcessingException {
         if(!(o instanceof String))
-            return null;
+            return null; //todo чаще всего возвращать null - это плохая практика, т.к. порождает возможность получить NullPointerException
         String json = (String) o;
         ObjectMapper objectMapper = new ObjectMapper();
-        TasksJournal t = objectMapper.readValue(json, TasksJournal.class);
+        TasksJournal t = objectMapper.readValue(json, TasksJournal.class); //todo стоит навсегда забыть переменные с неговорящими именами.
+        // Они допустимы только для тестового кода, котрый запустится один раз и потом будет удален.
+        // Весь код, котрый попадает под систему контроля версий, должен содержать только говорящие имена переменных.
         return t;
 
     }
