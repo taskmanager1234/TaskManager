@@ -18,6 +18,7 @@ public class JsonSerializer implements Serializer {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            //todo это что?
         }
         return json;
     }
@@ -35,17 +36,18 @@ public class JsonSerializer implements Serializer {
 
     public TasksJournal deserialize(Object o) throws InvalidTypeClassException {
         if(!(o instanceof String))
-            throw new InvalidTypeClassException("Invalid type class"); //todo чаще всего возвращать null - это плохая практика, т.к. порождает возможность получить NullPointerException
+            //todo error message должен содержать контекстную информацию о том, что именно пошло не так, чтобы прочитавший его мог понять, в чем именно проблема.
+            //сравни эти два сообщения "Invalid type class" и "Cannot deserialize object! Required object type is String, but actual is <type of o>"
+            //это относится ко всем эксепшенам в системе
+            throw new InvalidTypeClassException("Invalid type class");
         String json = (String) o;
         ObjectMapper objectMapper = new ObjectMapper();
-        TasksJournal tasksJournal = null; //todo стоит навсегда забыть переменные с неговорящими именами.
+        TasksJournal tasksJournal = null;
         try {
             tasksJournal = objectMapper.readValue(json, TasksJournal.class);
         } catch (JsonProcessingException e) {
             throw new InvalidTypeClassException("Error json readValue");
         }
-        // Они допустимы только для тестового кода, котрый запустится один раз и потом будет удален.
-        // Весь код, котрый попадает под систему контроля версий, должен содержать только говорящие имена переменных.
         return tasksJournal;
 
     }

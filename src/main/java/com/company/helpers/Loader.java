@@ -11,8 +11,6 @@ public class Loader {
         Path path = Paths.get(fileName);
         byte[] byteArray = Files.readAllBytes(path);
         return new String(byteArray);
-        //todo плохая практика делать длинные цепочки вызовов. Такой код сложнее читать и еще сложнее дебажить.
-        //нам незачем экономить строки кода, поэтому временные объекты стоит сохранять в переменные локальной области видимости.
     }
 
     public static byte[] readFromFileAsBytes(String fileName) throws IOException {
