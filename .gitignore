@@ -19,3 +19,5 @@ target/generated-sources/
 web/
 !/pom.xml
 !/TaskManager.iml
+!/.idea/
+!/target/
