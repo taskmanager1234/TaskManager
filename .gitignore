@@ -1,0 +1,21 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.gitignore
+.idea/libraries/Maven__com_fasterxml_jackson_dataformat_jackson_dataformat_xml_2_11_1.xml
+.idea/libraries/Maven__com_fasterxml_jackson_module_jackson_module_jaxb_annotations_2_13_0.xml
+.idea/libraries/Maven__com_fasterxml_woodstox_woodstox_core_6_2_1.xml
+.idea/libraries/Maven__org_codehaus_woodstox_stax2_api_4_2_1.xml
+out/
+target/TaskManager-1.0-SNAPSHOT/
+target/classes/
+target/generated-sources/
+web/
+!/pom.xml
+!/TaskManager.iml

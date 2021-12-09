@@ -5,9 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<table>
+border = "1" cellspacing="2" cellpadding="5">
+<tr><td><b>Title</b></td> <td><b>Description</b></td></tr>
     <tr data-th-each="task : ${tasks}">
         <td data-th-text="${task.title}">...</td>
         <td data-th-text="${task.description}">...</td>
     </tr>
+    <table>
 </body>
 </html>

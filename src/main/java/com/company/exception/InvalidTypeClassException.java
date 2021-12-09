@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 //todo оригинальная проблема этим эксепшеном не решена - этот эксепшен все равно представляет собой ошибка парсинга JSON. А интерфейс Serializer - общий для любой сериализации, а не только json-сериализации.
-public class InvalidTypeClassException extends JsonProcessingException {
+public class InvalidTypeClassException extends Exception {
 
     @Override
     public String getMessage() {
