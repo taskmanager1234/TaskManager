@@ -17,7 +17,6 @@ target/TaskManager-1.0-SNAPSHOT/
 target/classes/
 target/generated-sources/
 web/
-!/pom.xml
 !/TaskManager.iml
 !/.idea/
 !/target/
