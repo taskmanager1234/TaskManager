@@ -11,6 +11,7 @@ public class Loader {
         Path path = Paths.get(fileName);
         byte[] byteArray = Files.readAllBytes(path);
         return new String(byteArray);
+
     }
 
     public static byte[] readFromFileAsBytes(String fileName) throws IOException {
