@@ -16,7 +16,7 @@ public class YamlSerializer implements Serializer {
         try {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
         } catch (JsonProcessingException e) {
-            throw new SerializationException("Cannot serialize (beauty) object! Failed to get Yaml from Java object.",e);
+            throw new SerializationException("Cannot serialize (beauty) object! Failed to get Yaml from Java object.", e);
         }
         return json;
     }
@@ -27,21 +27,21 @@ public class YamlSerializer implements Serializer {
         try {
             json = objectMapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
-            throw new SerializationException("Cannot serialize object! Failed to get Yaml from Java object.",e);
+            throw new SerializationException("Cannot serialize object! Failed to get Yaml from Java object.", e);
         }
         return json;
     }
 
     public TasksJournal deserialize(Object o) throws SerializationException {
-        if(!(o instanceof String))
-            throw new SerializationException("Cannot deserialize object! Required object type is String, but actual is <type of o>"); //todo чаще всего возвращать null - это плохая практика, т.к. порождает возможность получить NullPointerException
+        if (!(o instanceof String))
+            throw new SerializationException("Cannot deserialize object! Required object type is String, but actual is " + o.getClass().getName()); //todo чаще всего возвращать null - это плохая практика, т.к. порождает возможность получить NullPointerException
         String json = (String) o;
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
         TasksJournal tasksJournal = null; //todo стоит навсегда забыть переменные с неговорящими именами.
         try {
             tasksJournal = objectMapper.readValue(json, TasksJournal.class);
         } catch (JsonProcessingException e) {
-            throw new SerializationException("Cannot deserialize object! Failed to convert Yaml to Java object using ObjectMapper class",e);
+            throw new SerializationException("Cannot deserialize object! Failed to convert Yaml to Java object using ObjectMapper class", e);
         }
 
         // Они допустимы только для тестового кода, котрый запустится один раз и потом будет удален.

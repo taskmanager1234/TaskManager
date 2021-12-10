@@ -19,20 +19,20 @@ public class BytesSerializer implements Serializer {
             }
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            throw new SerializationException("Cannot serialize object! Failed to get byte array from stream",e);
+            throw new SerializationException("Cannot serialize object! Failed to get byte array from stream", e);
         }
     }
 
     @Override
     public TasksJournal deserialize(Object o) throws SerializationException {
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream((byte[])o)) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream((byte[]) o)) {
             try (ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
                 return (TasksJournal) objectInputStream.readObject();
             } catch (ClassNotFoundException e) {
-                throw new SerializationException("Cannot deserialize object! Failed to deserialize byte array ",e);
+                throw new SerializationException("Cannot deserialize object! Failed to deserialize byte array ", e);
             }
         } catch (IOException e) {
-            throw new SerializationException("Cannot deserialize object! Failed to create byte array",e);
+            throw new SerializationException("Cannot deserialize object! Failed to create byte array", e);
         }
     }
 }

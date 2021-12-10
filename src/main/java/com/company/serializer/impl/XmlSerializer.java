@@ -23,7 +23,7 @@ public class XmlSerializer implements Serializer {
     public TasksJournal deserialize(Object o) throws SerializationException {
         XmlMapper xmlMapper = new XmlMapper();
         try {
-            return xmlMapper.readValue((String)o, TasksJournal.class);
+            return xmlMapper.readValue((String) o, TasksJournal.class);
         } catch (JsonProcessingException e) {
             throw new SerializationException("Cannot deserialize object! Failed to convert XML to Java object using XmlMapper class", e);
         }

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ReadingFromFile {
-    // разбить на строчки
+
     public static String readFromFileAsText(String fileName) throws IOException {
         Path path = Paths.get(fileName);
         byte[] byteArray = Files.readAllBytes(path);
