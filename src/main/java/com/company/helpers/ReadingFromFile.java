@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Loader {
+public class ReadingFromFile {
     // разбить на строчки
     public static String readFromFileAsText(String fileName) throws IOException {
         Path path = Paths.get(fileName);

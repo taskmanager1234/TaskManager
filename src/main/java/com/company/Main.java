@@ -1,13 +1,11 @@
 package com.company;
 
-import com.company.helpers.Loader;
-import com.company.helpers.Writer;
+import com.company.exception.SerializationException;
+import com.company.helpers.ReadingFromFile;
+import com.company.helpers.WritingToFile;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
-import com.company.serializer.impl.BytesSerializer;
 import com.company.serializer.impl.JsonSerializer;
-import com.company.serializer.impl.XmlSerializer;
-import com.company.serializer.impl.YamlSerializer;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,37 +27,50 @@ public class Main {
 
         System.out.println("");
         JsonSerializer j = new JsonSerializer();
-        Object o = j.serialize(tasksJournal);
+        Object o = null;
+        try {
+            o = j.serialize(tasksJournal);
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
         //System.out.println(j.deserialize(o));
 
 
        // FileWriter out = new FileWriter("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
-        Writer.writeToFileAsText((String)o, "C:\\Users\\denis\\Desktop\\Json\\textJson.json");
+        WritingToFile.writeToFileAsText((String)o, "C:\\Users\\denis\\Desktop\\Json\\textJson.json");
 
-        String d = Loader.readFromFileAsText("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
+        String d = ReadingFromFile.readFromFileAsText("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
        // System.out.println(d);
         System.out.println("Deserialize");
-        System.out.println (j.deserialize(d));
+        try {
+            System.out.println (j.deserialize(d));
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
 
         String str = new String("Des");
-        Writer.writeToFileAsBytes((str).getBytes(), "C:\\Users\\denis\\Desktop\\Json\\textByte1.bin");
+        WritingToFile.writeToFileAsBytes((str).getBytes(), "C:\\Users\\denis\\Desktop\\Json\\textByte1.bin");
 
-        String readBytes = new  String(Loader.readFromFileAsBytes("C:\\Users\\denis\\Desktop\\Json\\textByte.bin"));
-        System.out.println (j.deserialize(readBytes));
-
-
-        YamlSerializer yamlSerializer = new YamlSerializer();
-        Object serializeYaml = yamlSerializer.serialize(tasksJournal);
-        Writer.writeToFileAsText((String)serializeYaml , "C:\\Users\\denis\\Desktop\\Json\\yaml.yaml");
-
-        BytesSerializer bytesSerializer = new BytesSerializer();
-        Object bytes = bytesSerializer.serialize(tasksJournal);
-        Writer.writeToFileAsBytes((byte[]) bytes , "C:\\Users\\denis\\Desktop\\Json\\bytes2.bin");
+        String readBytes = new  String(ReadingFromFile.readFromFileAsBytes("C:\\Users\\denis\\Desktop\\Json\\textByte.bin"));
+        try {
+            System.out.println (j.deserialize(readBytes));
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
 
 
-        XmlSerializer xmlSerializer = new XmlSerializer();
-        Object xml = xmlSerializer.serialize(tasksJournal);
-        Writer.writeToFileAsText((String) xml , "C:\\Users\\denis\\Desktop\\Json\\xml.xml");
+//        YamlSerializer yamlSerializer = new YamlSerializer();
+//        Object serializeYaml = yamlSerializer.serialize(tasksJournal);
+//        Writer.writeToFileAsText((String)serializeYaml , "C:\\Users\\denis\\Desktop\\Json\\yaml.yaml");
+//
+//        BytesSerializer bytesSerializer = new BytesSerializer();
+//        Object bytes = bytesSerializer.serialize(tasksJournal);
+//        Writer.writeToFileAsBytes((byte[]) bytes , "C:\\Users\\denis\\Desktop\\Json\\bytes2.bin");
+//
+//
+//        XmlSerializer xmlSerializer = new XmlSerializer();
+//        Object xml = xmlSerializer.serialize(tasksJournal);
+//        Writer.writeToFileAsText((String) xml , "C:\\Users\\denis\\Desktop\\Json\\xml.xml");
 
 
 
