@@ -43,6 +43,7 @@ public class YamlSerializer implements Serializer {
         } catch (JsonProcessingException e) {
             throw new SerializationException("Cannot deserialize object! Failed to convert Yaml to Java object using ObjectMapper class",e);
         }
+
         // Они допустимы только для тестового кода, котрый запустится один раз и потом будет удален.
         // Весь код, котрый попадает под систему контроля версий, должен содержать только говорящие имена переменных.
         return tasksJournal;
