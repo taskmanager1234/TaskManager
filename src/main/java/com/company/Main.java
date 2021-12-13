@@ -1,8 +1,8 @@
 package com.company;
 
 import com.company.exception.SerializationException;
-import com.company.helpers.ReadingFromFile;
-import com.company.helpers.WritingToFile;
+import com.company.helpers.ReaderFromFile;
+import com.company.helpers.WriterToFile;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.serializer.impl.JsonSerializer;
@@ -37,9 +37,9 @@ public class Main {
 
 
        // FileWriter out = new FileWriter("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
-        WritingToFile.writeToFileAsText((String)o, "C:\\Users\\denis\\Desktop\\Json\\textJson.json");
+        WriterToFile.writeToFileAsText((String)o, "C:\\Users\\denis\\Desktop\\Json\\textJson.json");
 
-        String d = ReadingFromFile.readFromFileAsText("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
+        String d = ReaderFromFile.readFromFileAsText("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
        // System.out.println(d);
         System.out.println("Deserialize");
         try {
@@ -49,9 +49,9 @@ public class Main {
         }
 
         String str = new String("Des");
-        WritingToFile.writeToFileAsBytes((str).getBytes(), "C:\\Users\\denis\\Desktop\\Json\\textByte1.bin");
+        WriterToFile.writeToFileAsBytes((str).getBytes(), "C:\\Users\\denis\\Desktop\\Json\\textByte1.bin");
 
-        String readBytes = new  String(ReadingFromFile.readFromFileAsBytes("C:\\Users\\denis\\Desktop\\Json\\textByte.bin"));
+        String readBytes = new  String(ReaderFromFile.readFromFileAsBytes("C:\\Users\\denis\\Desktop\\Json\\textByte.bin"));
         try {
             System.out.println (j.deserialize(readBytes));
         } catch (SerializationException e) {

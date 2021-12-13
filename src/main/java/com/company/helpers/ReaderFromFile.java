@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ReadingFromFile {
+public class ReaderFromFile {
 
     public static String readFromFileAsText(String fileName) throws IOException {
         Path path = Paths.get(fileName);

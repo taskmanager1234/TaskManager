@@ -9,15 +9,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 public class Task implements Serializable {
     private String title;
     private String description;
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startDate;
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endDate;
     private Date interval;
+    private UUID id;
 
 
     public Task(String title, String description, Date startDate, Date endDate) {
@@ -25,6 +29,13 @@ public class Task implements Serializable {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.id = UUID.randomUUID();
+    }
+    public Task(String title, String description, Date endDate) {
+        this.title = title;
+        this.description = description;
+        this.endDate = endDate;
+        this.id = UUID.randomUUID();
     }
 
     public Task() {
@@ -72,5 +83,13 @@ public class Task implements Serializable {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

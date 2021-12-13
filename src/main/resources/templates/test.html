@@ -2,15 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
+<h1> TaskJournal</h1>
+<a href="addTask">Add Task</a>
 <table
-border = "1" cellspacing="2" cellpadding="5">
-<tr><td><b>Title</b></td> <td><b>Description</b></td></tr>
+        border="1" cellspacing="5" cellpadding="10">
+    <tr>
+        <td><b>Title</b></td>
+        <td><b>Description</b></td>
+        <td><b>endDate</b></td>
+        <td><b>action</b></td>
+    </tr>
+
     <tr data-th-each="task : ${tasks}">
         <td data-th-text="${task.title}">...</td>
         <td data-th-text="${task.description}">...</td>
+        <td th:text="${#dates.format(task.endDate, 'dd-MM-yyyy HH:mm:ss')}">date</td>
+        <td>
+            <form th:action="@{'/updateTask/'+ ${task.getId().toString()}}" method="get">
+            <button type="submit" value="update"/>
+            <button type="submit" value="delete"/>
+            </form>
+        </td>
     </tr>
+</table>
 </body>
 </html>

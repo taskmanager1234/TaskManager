@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Task</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>UpdateTask</h1>
+<form th:action="@{'/updateTask/'+ ${task.getId().toString()}}" method="post">
+    <input type="text" name="title" th:value="${task.title}">
+    <input type="text" name="description" th:value="${task.description}">
+    <input type="datetime-local" name="endDate" th:value="${#dates.format(task.endDate, 'dd-MM-yyyy HH:mm:ss')}">
+    <button type ="submit">update</button>
+</form>
+</body>
+</html>
+
+
+

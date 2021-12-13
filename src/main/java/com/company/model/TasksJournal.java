@@ -1,8 +1,11 @@
 package com.company.model;
 
+import org.apache.catalina.valves.HealthCheckValve;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TasksJournal implements Serializable {
     private List<Task> tasks;
@@ -28,12 +31,23 @@ public class TasksJournal implements Serializable {
         tasks.remove(index);
     }
 
+    public Task getTaskById(UUID id) throws Exception {
+        for(Task task:tasks){
+            if(task.getId().equals(id))
+                return task;
+        }
+        throw new Exception("Task with id = " + id + "not found");
+    }
+
     public void removeTask(Task task) {
         tasks.remove(task);
     }
 
-    public void updateTask(Task task, int index) {
-        tasks.set(index, task);
+    public void updateTaskByID(UUID id,Task task) throws Exception {
+      Task curTask = getTaskById(id);
+      curTask.setTitle(task.getTitle());
+      curTask.setDescription(task.getDescription());
+      curTask.setEndDate(task.getEndDate());
     }
 
     public boolean containsTask(Task task) {
