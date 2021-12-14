@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Task implements Serializable {
     private String title;
     private String description;
+    //todo magic numbers
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startDate;
@@ -89,6 +90,7 @@ public class Task implements Serializable {
         return id;
     }
 
+    //todo нужна ли возможность менять id у задачи?
     public void setId(UUID id) {
         this.id = id;
     }

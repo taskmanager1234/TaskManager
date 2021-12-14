@@ -18,6 +18,7 @@ public class StartWebTaskManager {
     public static void main(String[] args) throws SerializationException {
 
         SpringApplication.run(StartWebTaskManager.class, args);
+        //todo а зачем нужна эта инициализация?
         TaskManagerSingleton taskManagerSingleton = TaskManagerSingleton.getInstance(); // инициализация TJ
 //        try {
 //            String d = ReaderFromFile.readFromFileAsText("C:\\Users\\denis\\Desktop\\Json\\textJson.json");

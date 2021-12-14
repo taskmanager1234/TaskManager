@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-//todo не удачное название для класса, Writer - это очень общее имя и оно дает очень расплывчатое представление о том, в чем назначение класса
 public class WriterToFile {
 
     public static void writeToFileAsText(String o, String fileName) throws IOException {

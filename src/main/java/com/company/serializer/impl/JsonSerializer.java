@@ -17,7 +17,6 @@ public class JsonSerializer implements Serializer {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
         } catch (JsonProcessingException e) {
             throw new SerializationException("Cannot serialize(Beauty) object! Failed to get JSON string from Java object. ", e);
-            //todo это что?
         }
         return json;
     }
@@ -35,9 +34,6 @@ public class JsonSerializer implements Serializer {
 
     public TasksJournal deserialize(Object o) throws SerializationException {
         if (!(o instanceof String))
-            //todo error message должен содержать контекстную информацию о том, что именно пошло не так, чтобы прочитавший его мог понять, в чем именно проблема.
-            //сравни эти два сообщения "Invalid type class" и "Cannot deserialize object! Required object type is String, but actual is <type of o>"
-            //это относится ко всем эксепшенам в системе
             throw new SerializationException("Cannot deserialize object! Required object type is String, but actual is "+ o.getClass().getName());
         String json = (String) o;
         ObjectMapper objectMapper = new ObjectMapper();
