@@ -14,7 +14,6 @@ public class BytesSerializer implements Serializer {
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
                 objectOutputStream.writeObject(o);
             } catch (IOException e) {
-                //todo при выбрасывании нового эксепшена всегда нужно передать в конструктор оригинальный эксепшен, чтобы не терялся стек вызовов. Иначе возникшие проблемы очень сложно анализировать.
                 throw new SerializationException("Cannot serialize object! Failed to write object to stream", e);
             }
             return byteArrayOutputStream.toByteArray();

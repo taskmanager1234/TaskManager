@@ -1,14 +1,7 @@
 package com.company;
 
-import java.io.IOException;
-import java.util.Date;
-
 import com.company.exception.SerializationException;
-import com.company.helpers.ReaderFromFile;
-import com.company.model.Task;
-import com.company.model.TaskManagerSingleton;
-import com.company.model.TasksJournal;
-import com.company.serializer.impl.JsonSerializer;
+import com.company.model.JournalStorage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -19,7 +12,7 @@ public class StartWebTaskManager {
 
         SpringApplication.run(StartWebTaskManager.class, args);
         //todo а зачем нужна эта инициализация?
-        TaskManagerSingleton taskManagerSingleton = TaskManagerSingleton.getInstance(); // инициализация TJ
+        JournalStorage journalStorage = JournalStorage.getInstance(); // инициализация TJ
 //        try {
 //            String d = ReaderFromFile.readFromFileAsText("C:\\Users\\denis\\Desktop\\Json\\textJson.json");
 //            JsonSerializer j = new JsonSerializer();

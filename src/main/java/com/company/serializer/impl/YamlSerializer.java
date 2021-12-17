@@ -37,7 +37,7 @@ public class YamlSerializer implements Serializer {
             throw new SerializationException("Cannot deserialize object! Required object type is String, but actual is " + o.getClass().getName()); //todo чаще всего возвращать null - это плохая практика, т.к. порождает возможность получить NullPointerException
         String json = (String) o;
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-        TasksJournal tasksJournal = null; //todo стоит навсегда забыть переменные с неговорящими именами.
+        TasksJournal tasksJournal = null;
         try {
             tasksJournal = objectMapper.readValue(json, TasksJournal.class);
         } catch (JsonProcessingException e) {

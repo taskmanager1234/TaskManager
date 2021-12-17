@@ -19,11 +19,11 @@
     <tr data-th-each="task : ${tasks}">
         <td data-th-text="${task.title}">...</td>
         <td data-th-text="${task.description}">...</td>
-        <td th:text="${#dates.format(task.endDate, 'dd-MM-yyyy HH:mm:ss')}">date</td>
+        <td th:text="${#dates.format(task.endDate, 'dd-MM-yyyy HH:mm:ss')}">...</td>
         <td>
             <form th:action="@{'/updateTask/'+ ${task.getId().toString()}}" method="get">
-            <button type="submit" value="update"/>
-            <button type="submit" value="delete"/>
+            <button type="submit" value="update"/>Update</button>
+            <button type="submit" value="delete"/>Delete</button>
             </form>
         </td>
     </tr>

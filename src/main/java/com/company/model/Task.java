@@ -16,12 +16,10 @@ public class Task implements Serializable {
     private String description;
     //todo magic numbers
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startDate;
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endDate;
-    private Date interval;
+    private Date reminder;
     private UUID id;
 
 
@@ -90,8 +88,5 @@ public class Task implements Serializable {
         return id;
     }
 
-    //todo нужна ли возможность менять id у задачи?
-    public void setId(UUID id) {
-        this.id = id;
-    }
+
 }
