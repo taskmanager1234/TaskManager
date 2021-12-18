@@ -15,8 +15,8 @@
             <td><b>Task end</b></td>
         </tr>
         <tr>
-            <td><input type="text" name="title" th:value="${task.title}"></td>
-            <td><input type="text" name="description" th:value="${task.description}"></td>
+            <td><input type="text" name="title" th:value="${task.getTitle()}"></td>
+            <td><input type="text" name="description" th:value="${task.getDescription()}"></td>
             <td><input type="datetime-local" name="startDate" th:value="${task.getStartDate().toString()}"></td>
             <td><input type="datetime-local" name="endDate" th:value="${task.getEndDate.toString()}"></td>
         </tr>
