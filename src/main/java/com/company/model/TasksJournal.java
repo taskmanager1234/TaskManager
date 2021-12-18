@@ -42,8 +42,10 @@ public class TasksJournal implements Serializable {
 
 
     public void updateTaskByID(UUID id,Task task) throws NoSuchTaskException {
-        if(tasks.containsKey(id))
+        if(tasks.containsKey(id)){
             tasks.put(id, task);
+        return;
+        }
         throw new NoSuchTaskException("Task with id = " + id + "not found");
     }
 
@@ -60,5 +62,9 @@ public class TasksJournal implements Serializable {
         return "TasksJournal{" +
                 "task=" + tasks +
                 "}";
+    }
+
+    public void setTasks(Map<UUID, Task> tasks) {
+        this.tasks = tasks;
     }
 }

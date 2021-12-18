@@ -2,17 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Add Task</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-    <body>
-    <h1> AddTask</h1>
-    <form action="/addTask" method="post">
-    <input type="text" name="title" placeholder="Введите имя задачи">
-    <input type="text" name="description" placeholder="Введите описание задачи">
-    <input type="datetime-local" name="endDate" placeholder="Дата напомниная">
-    <button type ="submit">add Task</button>
-    </form>
-    </body>
+<body>
+<h1> AddTask</h1>
+<form action="/addTask" method="post">
+    <table>
+        <tr>
+            <td><b>Title</b></td>
+            <td><b>Description</b></td>
+            <td><b>Task start</b></td>
+            <td><b>Task end</b></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="title" placeholder="Введите имя задачи"></td>
+            <td><input type="text" name="description" placeholder="Введите описание задачи"></td>
+            <td><input type="datetime-local" name="startDate" placeholder="Начало"></td>
+            <td><input type="datetime-local" name="endDate" placeholder="Окончание"></td>
+        </tr>
+    </table>
+    <button type="submit">Add</button>
+</form>
+</body>
 </html>
 
 

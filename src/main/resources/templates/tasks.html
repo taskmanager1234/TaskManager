@@ -12,18 +12,30 @@
     <tr>
         <td><b>Title</b></td>
         <td><b>Description</b></td>
-        <td><b>endDate</b></td>
-        <td><b>action</b></td>
+        <td><b>Task start</b></td>
+        <td><b>Task end</b></td>
+        <td><b>Actions</b></td>
     </tr>
 
     <tr data-th-each="task : ${tasks}">
-        <td data-th-text="${task.title}">...</td>
-        <td data-th-text="${task.description}">...</td>
-        <td th:text="${#dates.format(task.endDate, 'dd-MM-yyyy HH:mm:ss')}">...</td>
+        <td data-th-text="${task.getValue().getTitle()}">...</td>
+        <td data-th-text="${task.getValue().getDescription()}">...</td>
+        <td th:text="${#temporals.format(task.getValue().getStartDate(), 'dd-MM-yyyy HH:mm:ss')}">...</td>
+        <td th:text="${#temporals.format(task.getValue().getEndDate(), 'dd-MM-yyyy HH:mm:ss')}">...</td>
         <td>
-            <form th:action="@{'/updateTask/'+ ${task.getId().toString()}}" method="get">
-            <button type="submit" value="update"/>Update</button>
-            <button type="submit" value="delete"/>Delete</button>
+            <form th:action="@{'/updateTask/'+ ${task.getValue().getId().toString()}}" method="post">
+                <button type="submit" value="update"/>
+                Update</button>
+            </form>
+
+            <form th:action="@{'/deleteTask/'+ ${task.getValue().getId().toString()}}" method="post">
+                <script>
+                    function clickHandler() {
+                        window.confirm("Do you really want to delete task?");
+                    }
+                </script>
+                <button type="submit" value="delete" onclick="clickHandler()"/>
+                Delete</button>
             </form>
         </td>
     </tr>

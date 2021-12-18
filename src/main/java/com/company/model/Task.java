@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -16,21 +18,21 @@ public class Task implements Serializable {
     private String description;
     //todo magic numbers
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
-    private Date startDate;
+    private LocalDateTime startDate;
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Europe/Samara")
-    private Date endDate;
-    private Date reminder;
+    private LocalDateTime endDate;
+    private LocalDateTime reminder;
     private UUID id;
 
 
-    public Task(String title, String description, Date startDate, Date endDate) {
+    public Task(String title, String description, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.id = UUID.randomUUID();
     }
-    public Task(String title, String description, Date endDate) {
+    public Task(String title, String description, LocalDateTime endDate) {
         this.title = title;
         this.description = description;
         this.endDate = endDate;
@@ -57,19 +59,19 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

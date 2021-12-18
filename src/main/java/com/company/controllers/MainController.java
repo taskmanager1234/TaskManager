@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,9 +33,13 @@ public class MainController {
     }
 
     @PostMapping("/addTask")
-    public String addTaskPost(@RequestParam String title, @RequestParam String description, @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") Date endDate, Model model){
+    public String addTaskPost(@RequestParam String title,
+                              @RequestParam String description,
+                              @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                              @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
+                              ){
             System.out.println(endDate);
-            Task task = new Task(title, description, endDate);
+            Task task = new Task(title, description,startDate, endDate);
             JournalStorage.getInstance().getTasksJournal().addTask(task);
 
         return "redirect:/tasks";
@@ -42,7 +47,7 @@ public class MainController {
 
 
     @GetMapping(value = "/")
-    public String getStartPage(Model model){
+    public String getStartPage(){
         return "redirect:/tasks";
     }
 
@@ -60,14 +65,27 @@ public class MainController {
 
 
     @PostMapping("/updateTask/{id}")
-    public String updateTaskPost(@PathVariable String id,@RequestParam String title, @RequestParam String description,@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") Date endDate, Model model){
+    public String updateTaskPost(@PathVariable String id,
+                                 @RequestParam String title,
+                                 @RequestParam String description,
+                                 @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                 @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
+                                 ){
         try {
             UUID taskId = UUID.fromString(id);
-            Task task = new Task(title, description, endDate);
+            Task task = new Task(title, description,startDate, endDate);
             JournalStorage.getInstance().getTasksJournal().updateTaskByID(taskId, task);
         }catch (NoSuchTaskException e) {
             return ErrorPages.NOT_FOUND;
         }
+        return "redirect:/tasks";
+    }
+
+
+    @PostMapping("/deleteTask/{id}")
+    public String deleteTaskPost(@PathVariable String id){
+            UUID taskId = UUID.fromString(id);
+            JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
         return "redirect:/tasks";
     }
 
