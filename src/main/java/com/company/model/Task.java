@@ -32,12 +32,14 @@ public class Task implements Serializable {
         this.endDate = endDate;
         this.id = UUID.randomUUID();
     }
-    public Task(String title, String description, LocalDateTime endDate) {
+    public Task(UUID id,String title, String description, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
         this.description = description;
+        this.startDate = startDate;
         this.endDate = endDate;
-        this.id = UUID.randomUUID();
+        this.id = id;
     }
+
 
     public Task() {
     }

@@ -22,12 +22,12 @@
         <td th:text="${#temporals.format(task.getValue().getStartDate(), 'dd-MM-yyyy HH:mm:ss')}">...</td>
         <td th:text="${#temporals.format(task.getValue().getEndDate(), 'dd-MM-yyyy HH:mm:ss')}">...</td>
         <td>
-            <form th:action="@{'/updateTask/'+ ${task.getValue().getId().toString()}}" method="get">
+            <form th:action="@{'/updateTask/'+ ${task.getValue().getId().toString()}}" >
                 <button type="submit" value="update"/>
                 Update</button>
             </form>
 
-            <form th:action="@{'/deleteTask/'+ ${task.getValue().getId().toString()}}" method="get">
+            <form th:action="@{'/deleteTask/'+ ${task.getValue().getId().toString()}}" method="post">
                 <script>
                     function clickHandler() {
                         window.confirm("Do you really want to delete task?");

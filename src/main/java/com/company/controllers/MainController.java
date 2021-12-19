@@ -1,6 +1,7 @@
 package com.company.controllers;
 
 import com.company.constants.ErrorPages;
+import com.company.constants.PathTemplates;
 import com.company.exception.NoSuchTaskException;
 import com.company.model.Task;
 import com.company.model.JournalStorage;
@@ -24,7 +25,7 @@ public class MainController {
     public String tasks(Model model){
         TasksJournal tasksJournal = JournalStorage.getInstance().getTasksJournal();
         model.addAttribute("tasks", tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
-        return "tasks";
+        return PathTemplates.TASKS;
     }
 
     @GetMapping(value = "/addTask")
@@ -42,7 +43,7 @@ public class MainController {
             Task task = new Task(title, description,startDate, endDate);
             JournalStorage.getInstance().getTasksJournal().addTask(task);
 
-        return "redirect:/tasks";
+        return PathTemplates.REDIRECT_TO_HOME;
     }
 
 
@@ -60,7 +61,7 @@ public class MainController {
         } catch (NoSuchTaskException e) {
             return ErrorPages.NOT_FOUND;
         }
-        return "updateTask";
+        return PathTemplates.UPDATE_TASKS;
     }
 
 
@@ -73,12 +74,12 @@ public class MainController {
                                  ){
         try {
             UUID taskId = UUID.fromString(id);
-            Task task = new Task(title, description,startDate, endDate);
+            Task task = new Task(taskId,title, description,startDate, endDate);
             JournalStorage.getInstance().getTasksJournal().updateTaskByID(taskId, task);
         }catch (NoSuchTaskException e) {
             return ErrorPages.NOT_FOUND;
         }
-        return "redirect:/tasks";
+        return PathTemplates.REDIRECT_TO_HOME;
     }
 
 
@@ -86,7 +87,7 @@ public class MainController {
     public String deleteTaskPost(@PathVariable String id){
             UUID taskId = UUID.fromString(id);
             JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
-        return "redirect:/tasks";
+        return PathTemplates.REDIRECT_TO_HOME;
     }
 
 }
