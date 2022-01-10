@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class ReaderFromFile {
 
-    public static String readFromFileAsText(String fileName) throws IOException {
+    public static String readAsText(String fileName) throws IOException {
         Path path = Paths.get(fileName);
         byte[] byteArray = Files.readAllBytes(path);
         return new String(byteArray);
