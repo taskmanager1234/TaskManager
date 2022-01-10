@@ -2,15 +2,9 @@ package com.company.model;
 
 //todo отражать в имене, что он singleton, не обязательно
 
-import com.company.JournalLoader;
-import com.company.exception.SerializationException;
 import com.company.repository.TaskRepository;
-import com.company.repository.TaskRepositoryFactory;
-import com.sun.xml.bind.v2.TODO;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +16,10 @@ import java.util.List;
 public class JournalStorage {
     @Autowired
     private TaskRepository taskRepository;
+
     private static JournalStorage INSTANCE;
     private TasksJournal tasksJournal;
-    private static Logger logger = Logger.getLogger(JournalStorage.class);
+   /// private static Logger logger = Logger.getLogger(JournalStorage.class);
 
     private JournalStorage() {
     }
