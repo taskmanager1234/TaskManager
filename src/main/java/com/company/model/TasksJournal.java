@@ -44,10 +44,7 @@ public class TasksJournal implements Serializable {
         tasks.remove(index);
     }
 
-    //todo почти никогда не стоит выбрасывать просто Exception - это признак ленивого программиста,
-    // который не подумал, а в каком сценарии у меня может произойти ошибка и как эта ошибка должна хендлиться. RESOLVED
     public Task getTaskById(UUID id) throws NoSuchTaskException {
-        //todo этот код не вызывает никаких вопросов? RESOLVED
         if (tasks.containsKey(id))
             return tasks.get(id);
 

@@ -23,7 +23,6 @@ public class Task implements Serializable {
 
     private String title;
     private String description;
-    //todo magic numbers
     @JsonFormat (shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN, timezone = TIMEZONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

@@ -33,15 +33,12 @@ public class FileController {
             //добавить в issue
         }
         try {
-            //todo надо избавляться от "magic numbers". Т.е. от неименованых литералов в коде.
-            // Либо должны быть именовванные константы, либо - какие-то проперти, которые задаются извне.
             WriterToFile.writeToFileAsText((String)o, filePath);
             //почитать про проперти ява и передавать имя файла из которого грузим журнал в пропертях
             //добавить класс для работы с пропертями добавить в ишью
         } catch (IOException e) {
-            return ErrorPages.NOT_FOUND;//todo что это?
+            return ErrorPages.NOT_FOUND;
         }
-        //todo аналогично. Это напрашивается, как константа. К тому же почему до сих пор test?
         return PathTemplates.REDIRECT_TO_HOME;
         // класс констант с url
     }
