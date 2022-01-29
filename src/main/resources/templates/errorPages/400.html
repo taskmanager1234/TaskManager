@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta name="robots" content="noindex,nofollow">
     <meta charset="utf-8">
@@ -15,12 +15,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>404</h1>
-    <h2>Мы не можем найти страницу, которую вы ищете.</h2>
-    <h4>Страница, которую вы запросили, не найдена в базе данных.<br> Скорее всего вы попали на битую ссылку или опечатались при вводе URL</h4>
-    <p class="box_in"><a href="/">Перейти на главную страницу</a>
-    </p>
-    <span th:utext="${message}"></span>
+    <h1>400</h1>
+    <h2>Вы ввели неверные данные</h2>
+    <p class="box_in"><a href="/">Перейти на главную страницу</a></p>
 </div>
 </body>
 </html>

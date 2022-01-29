@@ -9,5 +9,6 @@ public class StartWebTaskManager {
 
     public static void main(String[] args)  {
         SpringApplication.run(StartWebTaskManager.class, args);
+        InitPostgresSql.init();
     }
 }

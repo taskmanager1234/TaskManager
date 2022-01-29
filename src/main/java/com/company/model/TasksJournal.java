@@ -2,26 +2,29 @@ package com.company.model;
 
 import com.company.constants.Tables;
 import com.company.exception.NoSuchTaskException;
-
+import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-
+@Entity
+@Table(name = "task_journal", schema = "public", catalog = "postgres")
 public class TasksJournal implements Serializable {
-    private Map<UUID, Task> tasks;
 
-    public TasksJournal(UUID id,Map<UUID, Task> tasks) {
+    private UUID id;
+
+    @Transient
+    private transient Map<UUID, Task> tasks;
+
+    public TasksJournal(UUID id, Map<UUID, Task> tasks) {
         this.tasks = tasks;
         this.id = Objects.isNull(id) ? UUID.randomUUID() : id;
     }
 
     public TasksJournal() {
         this.tasks = new HashMap<>();
-        this.id = UUID.randomUUID();
     }
 
     public TasksJournal(UUID id, List<Task> tasks) {
@@ -30,10 +33,19 @@ public class TasksJournal implements Serializable {
     }
 
     @Id
-    private UUID id;
+    @Column(name = "id", columnDefinition = "varchar(40)")
+    @Type(type = "uuid-char")
+    public UUID getId() {
+        return id;
+    }
 
+    @Transient
     public Map<UUID, Task> getTasks() {
         return tasks;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void addTask(Task newTask) {

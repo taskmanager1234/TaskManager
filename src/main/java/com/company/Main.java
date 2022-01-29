@@ -1,19 +1,15 @@
 package com.company;
 
-import com.company.exception.SerializationException;
-import com.company.helpers.ReaderFromFile;
-import com.company.helpers.WriterToFile;
-import com.company.model.Task;
-import com.company.model.TasksJournal;
-import com.company.serializer.impl.JsonSerializer;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.sql.DataSource;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+
 //        Task task = new Task("Weather", "The Sun is shining", new LocalDateTime(), new LocalDateTime());
 //        Task task2 = new Task("ArrayList", "ArrayList.add", new LocalDateTime(), new LocalDateTime());
 //        System.out.println(task);
