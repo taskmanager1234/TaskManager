@@ -14,14 +14,14 @@ public class JournalRepository {
     private EntityManager entityManager;
 
 
+   public TasksJournal findById(UUID id) {
+        return entityManager.find(TasksJournal.class, id);
+   }
+
 //    public TasksJournal findById(UUID id) {
-//        return entityManager.find(TasksJournal.class, id.toString());
+//        return (TasksJournal) entityManager.createQuery("SELECT t FROM TasksJournal t WHERE t.id = :id").setParameter("id", id).getSingleResult();
+//
 //    }
-
-    public TasksJournal findById(UUID id) {
-        return (TasksJournal)entityManager.createQuery("SELECT t FROM TasksJournal t WHERE t.id = :id").setParameter("id", id).getSingleResult();
-
-    }
 
     public void create(TasksJournal tasksJournal) {
         entityManager.getTransaction().begin();

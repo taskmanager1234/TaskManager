@@ -44,13 +44,13 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public Task getByIdAndByJournalId(UUID taskId, UUID journalId) {
-        Task task = taskRepository.findById(taskId);
-        if (task.getTasksJournalId().equals(journalId))
-            return taskRepository.findById(taskId);
-        else
-            return null;
-    }
+//    public Task getByIdAndByJournalId(UUID taskId, UUID journalId) {
+//        Task task = taskRepository.findById(taskId);
+//        if (task.getTasksJournalId().equals(journalId))
+//            return taskRepository.findById(taskId);
+//        else
+//            return null;
+//    }
 
 
     public TaskService() {

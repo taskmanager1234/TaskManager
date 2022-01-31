@@ -1,8 +1,8 @@
 package com.company.model;
 
-import com.company.constants.Tables;
 import com.company.exception.NoSuchTaskException;
 import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -13,10 +13,18 @@ import java.util.stream.Collectors;
 @Table(name = "task_journal", schema = "public", catalog = "postgres")
 public class TasksJournal implements Serializable {
 
+    @Id
+    @Column(name = "id", columnDefinition = "varchar(40)")
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @Transient
-    private transient Map<UUID, Task> tasks;
+
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Task.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "journal_tasks_mapping",
+           joinColumns = {@JoinColumn(name = "journal_id", referencedColumnName = "id",  columnDefinition = "varchar(40)")},
+        inverseJoinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id", columnDefinition = "varchar(40)")})
+    @MapKey(name = "id")
+    private  Map<UUID, Task> tasks;
 
     public TasksJournal(UUID id, Map<UUID, Task> tasks) {
         this.tasks = tasks;
@@ -32,14 +40,11 @@ public class TasksJournal implements Serializable {
         this.id = Objects.isNull(id) ? UUID.randomUUID() : id;
     }
 
-    @Id
-    @Column(name = "id", columnDefinition = "varchar(40)")
-    @Type(type = "uuid-char")
     public UUID getId() {
         return id;
     }
 
-    @Transient
+
     public Map<UUID, Task> getTasks() {
         return tasks;
     }

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -41,14 +40,9 @@ public class Task implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reminder;
 
-    @ManyToOne
-    @JoinColumn (name = "tasks_journal_id", columnDefinition = "varchar(40)")
-    private TasksJournal tasksJournal;
 
     public Task() {
     }
-
-
 
     public Task(String title, String description, LocalDateTime startDate, LocalDateTime endDate) {
         this.title = title;
@@ -163,14 +157,6 @@ public class Task implements Serializable {
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (reminder != null ? reminder.hashCode() : 0);
         return result;
-    }
-  //  @Type(type = "uuid-char")
-   // @Column(name = ColumnNames.ID_JOURNAL_COLUMN, columnDefinition = "varchar(40)")
-    public TasksJournal getTasksJournalId() {
-        return tasksJournal;
-    }
-    public void setTasksJournalId(TasksJournal newTaskJournal) {
-        this.tasksJournal = newTaskJournal;
     }
 
     private static class ColumnNames {

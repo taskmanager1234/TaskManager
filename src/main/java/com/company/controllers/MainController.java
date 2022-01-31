@@ -80,7 +80,7 @@ public class MainController {
         try {
             UUID taskIdReduced = UUID.fromString(taskId);
             UUID journalIdReduced = UUID.fromString(idJournal);
-            Task task = taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
+            Task task = null; //taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
             if (Objects.nonNull(task)) {
                 model.addAttribute(MODEL_ATTRIBUTE_TASK, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
             } else {

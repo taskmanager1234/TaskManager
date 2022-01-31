@@ -47,8 +47,9 @@ public class TaskRepository {
     }
 
     public List<Task> getTasksByJournalId(UUID id) {
-      //ERROR
        // return entityManager.createNativeQuery("SELECT * FROM Task WHERE tasks_journal_id = :id").setParameter("id", id).getResultList();
-        return entityManager.createNativeQuery("SELECT t.* FROM Task t WHERE t.tasks_journal_id = :id", Task.class).setParameter("id", id.toString() ).getResultList();
+        return entityManager.createNativeQuery("SELECT t.* FROM Task t " +
+                " inner join journal_tasks_mapping jtm on jtm.task_id = t.id " +
+                "WHERE jtm.journal_id = :id ", Task.class).setParameter("id", id.toString() ).getResultList();
     }
 }

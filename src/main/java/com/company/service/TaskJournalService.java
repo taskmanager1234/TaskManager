@@ -21,11 +21,11 @@ public class TaskJournalService {
     public TasksJournal getById(UUID id) {
 
         TasksJournal tasksJournal = journalRepository.findById(id);
-        List<Task> tasksByJournalId = taskRepository.getTasksByJournalId(id);
-        for (Task currentTask : tasksByJournalId) {
-            currentTask.setTasksJournalId(tasksJournal);
-            tasksJournal.addTask(currentTask);
-        }
+//        List<Task> tasksByJournalId = taskRepository.getTasksByJournalId(id);
+//        for (Task currentTask : tasksByJournalId) {
+//         //   currentTask.setTasksJournalId(tasksJournal);
+//            tasksJournal.addTask(currentTask);
+   //     }
 
         return tasksJournal;
     }
