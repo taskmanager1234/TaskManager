@@ -27,14 +27,18 @@ public class TaskService {
       return task;
     }
 
-    public void create(Task task) throws CreateTaskException {
+    public void create(Task task, UUID journalId) throws CreateTaskException {
         if (task.getEndDate().isBefore(task.getStartDate()))
             throw new CreateTaskException("Could not create task: end date must be after start date");
-        taskRepository.create(task);
+        taskRepository.create(task,journalId);
     }
 
     public void delete(Task task)  {
         taskRepository.delete(task);
+    }
+
+    public void update(Task task)  {
+        taskRepository.update(task);
     }
 
     public void deleteTaskById(UUID id) throws DeleteTaskException {
@@ -44,13 +48,9 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-//    public Task getByIdAndByJournalId(UUID taskId, UUID journalId) {
-//        Task task = taskRepository.findById(taskId);
-//        if (task.getTasksJournalId().equals(journalId))
-//            return taskRepository.findById(taskId);
-//        else
-//            return null;
-//    }
+    public Task getByIdAndByJournalId(UUID taskId, UUID journalId) {
+      return taskRepository.getTaskByJournalIdAndTaskId(taskId, journalId);
+    }
 
 
     public TaskService() {

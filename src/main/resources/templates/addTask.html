@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1> AddTask</h1>
-<form action="/addTask" method="post">
+<form th:action="@{'/tasksJournal/'+${journalId}+'/addTask/'}" method="post">
     <table>
         <tr>
             <td><b>Title</b></td>

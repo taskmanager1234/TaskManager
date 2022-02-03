@@ -39,18 +39,22 @@ public class MainController {
     @GetMapping(value = Endpoints.TASKS)
     public String tasks(@PathVariable UUID id, Model model) {
         TasksJournal tasksJournal = taskJournalService.getById(id);
+        model.addAttribute("journalId", id);
         model.addAttribute(MODEL_ATTRIBUTE_TASK, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
         return PathTemplates.TASKS;
     }
 
-    //todo зачем нужен этот метод?
+
     @GetMapping(value = Endpoints.ADD_TASK)
-    public String showCreateTask() {
+    public String showCreateTask(Model model,@PathVariable String id) {
+        UUID journalIdReduced = UUID.fromString(id);
+        model.addAttribute("journalId", journalIdReduced);
         return PathTemplates.ADD_TASK;
     }
 
     @PostMapping(value = Endpoints.ADD_TASK)
-    public String addTaskPost(@RequestParam String title,
+    public String addTaskPost(@PathVariable(name = "id") String idJournal,
+                              @RequestParam String title,
                               @RequestParam String description,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
@@ -59,13 +63,14 @@ public class MainController {
         // Предлагаю сократить его зону ответственности только до подготовки данных для UI, всю же логику работы с тасками\журналами вынести в отдельные классы-сервисы, TasksService, JournalsService.
         // Сервисы не будут ничего знать о UI, они будут просто предоставялть методы работы с сущностями, CRUD, поиск и т.д.
         Task task = new Task(title, description, startDate, endDate);
+        UUID journalIdReduced = UUID.fromString(idJournal);
         try {
-            taskService.create(task);
+            taskService.create(task, journalIdReduced);
         } catch (CreateTaskException e) {
             return ErrorPages.BAD_REQUEST;
         }
         //scheduler.scheduleTask(task);
-        return PathTemplates.REDIRECT_TO_HOME;
+        return  String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
 
 
@@ -80,8 +85,9 @@ public class MainController {
         try {
             UUID taskIdReduced = UUID.fromString(taskId);
             UUID journalIdReduced = UUID.fromString(idJournal);
-            Task task = null; //taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
+            Task task = taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
             if (Objects.nonNull(task)) {
+                model.addAttribute("journalId", journalIdReduced);
                 model.addAttribute(MODEL_ATTRIBUTE_TASK, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
             } else {
                 throw new NoSuchTaskException("Task with id  = " + taskId + " not found in Journal with id = " + idJournal);
@@ -96,7 +102,8 @@ public class MainController {
 
 
     @PostMapping(Endpoints.UPDATE_TASK)
-    public String updateTaskPost(@PathVariable String id,
+    public String updateTaskPost(@PathVariable(name = "id") String idJournal,
+                                 @PathVariable(name = "taskId") String taskId,
                                  @RequestParam String title,
                                  @RequestParam String description,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -105,39 +112,40 @@ public class MainController {
     ) {
 
         //todo зачем мы создаем новый объект таски? А вдруг такой таски в базе нет? Тогда вместо update у нас произойжет create. То ли это поведение, которое мы ожидаем от этого метода?
-        UUID taskId = UUID.fromString(id);
-
-        Task task = null;
+        UUID taskIdNew = UUID.fromString(taskId);
+        UUID journalIdReduced = UUID.fromString(idJournal);
+        Task task;
         try {
-            task = taskService.getById(taskId);
+            task = taskService.getById(taskIdNew);
         } catch (TaskNotFoundException e) {
             model.addAttribute(MODEL_NOT_FOUND_MESSAGE, e.getMessage());
             return ErrorPages.NOT_FOUND;
         }
-        // JournalStorage.getInstance().getTasksJournal().updateTaskByID(taskId, task);
-        try {
-            taskService.create(task);
-        } catch (CreateTaskException e) {
-            model.addAttribute(MODEL_NOT_FOUND_MESSAGE, e.getMessage());
-            return ErrorPages.BAD_REQUEST;
-        }
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setStartDate(startDate);
+        task.setEndDate(endDate);
 
-        return PathTemplates.REDIRECT_TO_HOME;
+        // JournalStorage.getInstance().getTasksJournal().updateTaskByID(taskId, task);
+
+            taskService.update(task);
+
+        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal) ;
     }
 
 
     @PostMapping(Endpoints.DELETE_TASK)
-    public String deleteTaskPost(@PathVariable String id, Model model) {
-        UUID taskId = UUID.fromString(id);
+    public String deleteTaskPost(@PathVariable(name = "id") String idJournal,@PathVariable(name = "taskId") String taskId, Model model) {
+        UUID taskIdNew = UUID.fromString(taskId);
         // JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
 
         try {
-            taskService.deleteTaskById(taskId);
+            taskService.deleteTaskById(taskIdNew);
         } catch (DeleteTaskException e) {
             model.addAttribute(MODEL_NOT_FOUND_MESSAGE, e.getMessage());
             return ErrorPages.NOT_FOUND;
         }
-        return PathTemplates.REDIRECT_TO_HOME;
+        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
 
 }

@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,21 +24,35 @@ public class Task implements Serializable {
     private static final String DATE_PATTERN = "dd-MM-yyyy HH:mm:ss";
     private static final String TIMEZONE = "Europe/Samara";
 
+    @Id
+    @Column(name = "id", columnDefinition = "varchar(40)")
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
+    @Basic
+    @Column(name = ColumnNames.TITLE_COLUMN, nullable = false, length = 110)
     private String title;
+
+    @Basic
+    @Column(name = ColumnNames.DESCRIPTION_COLUMN, nullable = true, length = 50000)
     private String description;
 
+    @Basic
+    @Column(name = ColumnNames.START_DATE_COLUMN, nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN, timezone = TIMEZONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startDate;
 
+    @Basic
+    @Column(name = ColumnNames.END_DATE_COLUMN, nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN, timezone = TIMEZONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endDate;
 
+    @Basic
+    @Column(name = ColumnNames.REMINDER_COLUMN, nullable = true)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reminder;
@@ -60,39 +77,41 @@ public class Task implements Serializable {
         this.id = id;
     }
 
-    @Id
-    @Column(name = ColumnNames.ID_COLUMN, columnDefinition = "varchar(40)")
-    //@Type(type = "uuid-char")
+//    public Task(UUID id, String title, String description, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime reminder) {
+//        this.id = id;
+//        this.title = title;
+//        this.description = description;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//        this.reminder = reminder;
+//    }
+
+
     public UUID getId() {
         return id;
     }
 
-    @Basic
-    @Column(name = ColumnNames.TITLE_COLUMN, nullable = false, length = 110)
+
     public String getTitle() {
         return title;
     }
 
-    @Basic
-    @Column(name = ColumnNames.DESCRIPTION_COLUMN, nullable = true, length = 50000)
+
     public String getDescription() {
         return description;
     }
 
-    @Basic
-    @Column(name = ColumnNames.START_DATE_COLUMN, nullable = false)
+
     public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    @Basic
-    @Column(name = ColumnNames.END_DATE_COLUMN, nullable = false)
+
     public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    @Basic
-    @Column(name = ColumnNames.REMINDER_COLUMN, nullable = true)
+
     public LocalDateTime getReminder() {
         return reminder;
     }
