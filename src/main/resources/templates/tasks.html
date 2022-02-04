@@ -10,22 +10,14 @@
         border="1" cellspacing="5" cellpadding="10">
     <tr>
         <td><b>Title</b></td>
-        <td><b>Description</b></td>
-        <td><b>Task start</b></td>
-        <td><b>Task end</b></td>
         <td><b>Actions</b></td>
     </tr>
 
     <tr data-th-each="task : ${tasks}">
-        <td data-th-text="${task.getValue().getTitle()}">...</td>
-        <td data-th-text="${task.getValue().getDescription()}">...</td>
-        <td th:text="${#temporals.format(task.getValue().getStartDate(), 'dd-MM-yyyy HH:mm:ss')}">...</td>
-        <td th:text="${#temporals.format(task.getValue().getEndDate(), 'dd-MM-yyyy HH:mm:ss')}">...</td>
+        <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getValue().getId().toString()}}" data-th-text="${task.getValue().getTitle()}"> </a></td>
+
         <td>
-            <form th:action="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getValue().getId().toString()}}" >
-                <button type="submit" value="update"/>
-                Update</button>
-            </form>
+
 
             <form th:action="@{'/tasksJournal/'+${journalId}+'/deleteTask/'+ ${task.getValue().getId().toString()}}" method="post">
                 <script>

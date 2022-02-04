@@ -1,6 +1,5 @@
 package com.company.controllers;
 
-import com.company.constants.Endpoints;
 import com.company.constants.ErrorPages;
 import com.company.constants.PathTemplates;
 import com.company.exception.CreateTaskException;
@@ -25,8 +24,25 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/tasksJournal/{id}")
 public class MainController {
-    private static final String MODEL_ATTRIBUTE_TASK = "tasks";
-    private static final String MODEL_NOT_FOUND_MESSAGE = "message";
+
+    private static class Endpoints {
+        public static final String TASKS = "/tasks";
+        public static final String ADD_TASK = "/addTask";
+        public static final String MAIN_PAGE = "/";
+        public static final String UPDATE_TASK = "/updateTask/{taskId}";
+        public static final String DELETE_TASK = "/deleteTask/{taskId}";
+    }
+
+    private static class ModelAttributes {
+        public static final String TASKS = "tasks";
+        public static final String NOT_FOUND_MESSAGE = "message";
+        public static final String JOURNAL_ID = "journalId";
+    }
+
+    private static class PathVariables {
+        public static final String JOURNAL_ID = "id";
+        public static final String TASK_ID = "taskId";
+    }
     // @Autowired
     // private CancellableScheduler scheduler;//todo что это за класс, почему его нет на git?
 
@@ -39,21 +55,21 @@ public class MainController {
     @GetMapping(value = Endpoints.TASKS)
     public String tasks(@PathVariable UUID id, Model model) {
         TasksJournal tasksJournal = taskJournalService.getById(id);
-        model.addAttribute("journalId", id);
-        model.addAttribute(MODEL_ATTRIBUTE_TASK, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
+        model.addAttribute(ModelAttributes.JOURNAL_ID, id);
+        model.addAttribute(ModelAttributes.TASKS, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
         return PathTemplates.TASKS;
     }
 
 
     @GetMapping(value = Endpoints.ADD_TASK)
-    public String showCreateTask(Model model,@PathVariable String id) {
+    public String showCreateTask(Model model, @PathVariable String id) {
         UUID journalIdReduced = UUID.fromString(id);
-        model.addAttribute("journalId", journalIdReduced);
+        model.addAttribute(ModelAttributes.JOURNAL_ID, journalIdReduced);
         return PathTemplates.ADD_TASK;
     }
 
     @PostMapping(value = Endpoints.ADD_TASK)
-    public String addTaskPost(@PathVariable(name = "id") String idJournal,
+    public String addTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                               @RequestParam String title,
                               @RequestParam String description,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -70,7 +86,7 @@ public class MainController {
             return ErrorPages.BAD_REQUEST;
         }
         //scheduler.scheduleTask(task);
-        return  String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
+        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
 
 
@@ -81,19 +97,19 @@ public class MainController {
 
     //todo в REST парадигме запросы типа GET используются только для получения данных, но не для из изменения\удаления. У нас тут явно запутывающий нейминг.
     @GetMapping(Endpoints.UPDATE_TASK)
-    public String showUpdateTaskPage(@PathVariable(name = "id") String idJournal, @PathVariable(name = "taskId") String taskId, Model model) {
+    public String showUpdateTaskPage(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal, @PathVariable(name = PathVariables.TASK_ID) String taskId, Model model) {
         try {
             UUID taskIdReduced = UUID.fromString(taskId);
             UUID journalIdReduced = UUID.fromString(idJournal);
             Task task = taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
             if (Objects.nonNull(task)) {
-                model.addAttribute("journalId", journalIdReduced);
-                model.addAttribute(MODEL_ATTRIBUTE_TASK, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
+                model.addAttribute(ModelAttributes.JOURNAL_ID, journalIdReduced);
+                model.addAttribute(ModelAttributes.TASKS, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
             } else {
                 throw new NoSuchTaskException("Task with id  = " + taskId + " not found in Journal with id = " + idJournal);
             }
         } catch (NoSuchTaskException e) {
-            model.addAttribute(MODEL_NOT_FOUND_MESSAGE, e.getMessage());
+            model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
             return ErrorPages.NOT_FOUND;//todo каким образом пользователь сможет увидеть сообщение об ошибке?
 
         }
@@ -102,8 +118,8 @@ public class MainController {
 
 
     @PostMapping(Endpoints.UPDATE_TASK)
-    public String updateTaskPost(@PathVariable(name = "id") String idJournal,
-                                 @PathVariable(name = "taskId") String taskId,
+    public String updateTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+                                 @PathVariable(name = PathVariables.TASK_ID) String taskId,
                                  @RequestParam String title,
                                  @RequestParam String description,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -113,12 +129,11 @@ public class MainController {
 
         //todo зачем мы создаем новый объект таски? А вдруг такой таски в базе нет? Тогда вместо update у нас произойжет create. То ли это поведение, которое мы ожидаем от этого метода?
         UUID taskIdNew = UUID.fromString(taskId);
-        UUID journalIdReduced = UUID.fromString(idJournal);
         Task task;
         try {
             task = taskService.getById(taskIdNew);
         } catch (TaskNotFoundException e) {
-            model.addAttribute(MODEL_NOT_FOUND_MESSAGE, e.getMessage());
+            model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
             return ErrorPages.NOT_FOUND;
         }
         task.setTitle(title);
@@ -128,21 +143,21 @@ public class MainController {
 
         // JournalStorage.getInstance().getTasksJournal().updateTaskByID(taskId, task);
 
-            taskService.update(task);
+        taskService.update(task);
 
-        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal) ;
+        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
 
 
     @PostMapping(Endpoints.DELETE_TASK)
-    public String deleteTaskPost(@PathVariable(name = "id") String idJournal,@PathVariable(name = "taskId") String taskId, Model model) {
+    public String deleteTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal, @PathVariable(name = PathVariables.TASK_ID) String taskId, Model model) {
         UUID taskIdNew = UUID.fromString(taskId);
         // JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
 
         try {
             taskService.deleteTaskById(taskIdNew);
         } catch (DeleteTaskException e) {
-            model.addAttribute(MODEL_NOT_FOUND_MESSAGE, e.getMessage());
+            model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
             return ErrorPages.NOT_FOUND;
         }
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);

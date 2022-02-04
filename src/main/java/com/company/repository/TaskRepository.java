@@ -67,9 +67,9 @@ public class TaskRepository {
         return (Task) entityManager.createNativeQuery("select task.* from task\n" +
                 "    inner join\n" +
                 "    (select * from journal_tasks_mapping\n" +
-                "    where journal_id = :journalId)\n" +
+                "    where journal_id = :journal_id)\n" +
                 "        as Journal\n" +
-                "        on task_id =id where task_id = :taskId", Task.class)
+                "        on task_id =id where task_id = :task_id", Task.class)
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString())
                 .setParameter(QueryParameters.TASK_ID, taskId.toString()).getSingleResult();
     }
