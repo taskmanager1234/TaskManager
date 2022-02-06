@@ -29,10 +29,12 @@ public class TaskRepository {
     @Transactional
     public void create(Task task, UUID journalId) {
         entityManager.persist(task);
-        entityManager.createNativeQuery("INSERT into journal_tasks_mapping " +
-                "values(:journal_id,:task_id)")
+        UUID taskId = task.getId();
+        entityManager.createNativeQuery("UPDATE  task " +
+                "set journal_id =:journal_id where task.id = :task_id")
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString())
-                .setParameter(QueryParameters.TASK_ID, task.getId().toString()).executeUpdate();
+                .setParameter(QueryParameters.TASK_ID, taskId.toString())
+               .executeUpdate();
     }
 
     @Transactional
@@ -54,22 +56,16 @@ public class TaskRepository {
 
 
     public List getTasksByJournalId(UUID id) {
-        return entityManager.createNativeQuery("select task.* from task\n" +
-                "    inner join\n" +
-                "    (select * from journal_tasks_mapping\n" +
-                "    where journal_id = :id)\n" +
-                "        as Journal\n" +
-                "        on task_id =id; ", Task.class)
+        return entityManager.createNativeQuery("select task.* from task where task.journal_id = :id", Task.class)
                 .setParameter(QueryParameters.ID, id.toString()).getResultList();
     }
 
     public Task getTaskByJournalIdAndTaskId(UUID taskId, UUID journalId) {
-        return (Task) entityManager.createNativeQuery("select task.* from task\n" +
-                "    inner join\n" +
-                "    (select * from journal_tasks_mapping\n" +
-                "    where journal_id = :journal_id)\n" +
-                "        as Journal\n" +
-                "        on task_id =id where task_id = :task_id", Task.class)
+        String query = String.format("select task.* from task " +
+                        "where task.journal_id = :%s and task.id = :%s",
+                QueryParameters.TASK_JOURNAL_ID,
+                QueryParameters.TASK_ID);
+        return (Task) entityManager.createNativeQuery(query, Task.class)
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString())
                 .setParameter(QueryParameters.TASK_ID, taskId.toString()).getSingleResult();
     }

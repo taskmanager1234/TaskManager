@@ -6,8 +6,6 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "task_journal", schema = "public", catalog = "postgres")
@@ -18,34 +16,24 @@ public class TasksJournal implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "journal_id")
+    private List<Task> tasks;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = Task.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "journal_tasks_mapping",
-           joinColumns = {@JoinColumn(name = "journal_id", referencedColumnName = "id",  columnDefinition = "varchar(40)")},
-        inverseJoinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id", columnDefinition = "varchar(40)")})
-    @MapKey(name = "id")
-    private  Map<UUID, Task> tasks;
-
-    public TasksJournal(UUID id, Map<UUID, Task> tasks) {
+    public TasksJournal(UUID id, List<Task> tasks) {
         this.tasks = tasks;
         this.id = Objects.isNull(id) ? UUID.randomUUID() : id;
     }
 
     public TasksJournal() {
-        this.tasks = new HashMap<>();
-    }
-
-    public TasksJournal(UUID id, List<Task> tasks) {
-        this.tasks = tasks.stream().collect(Collectors.toMap(Task::getId, Function.identity()));
-        this.id = Objects.isNull(id) ? UUID.randomUUID() : id;
+        this.tasks = new ArrayList<>();
     }
 
     public UUID getId() {
         return id;
     }
 
-
-    public Map<UUID, Task> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
@@ -54,7 +42,7 @@ public class TasksJournal implements Serializable {
     }
 
     public void addTask(Task newTask) {
-        tasks.put(newTask.getId(), newTask);
+        tasks.add(newTask);
     }
 
     public void removeTask(UUID index) {
@@ -62,28 +50,28 @@ public class TasksJournal implements Serializable {
     }
 
     public Task getTaskById(UUID id) throws NoSuchTaskException {
-        if (tasks.containsKey(id))
-            return tasks.get(id);
-
-        throw new NoSuchTaskException("Task with id = " + id + "not found");
+        Task taskRes = tasks.stream()
+                .filter(task -> id.equals(task.getId()))
+                .findAny()
+                .orElse(null);
+        if (taskRes == null)
+            throw new NoSuchTaskException("Task with id = " + id + "not found");
+        return taskRes;
     }
 
 
     public void updateTaskByID(UUID id, Task task) throws NoSuchTaskException {
-        if (tasks.containsKey(id)) {
-            tasks.put(id, task);
-            return;
+        ListIterator<Task> iterator = tasks.listIterator();
+        while (iterator.hasNext()) {
+            UUID next = iterator.next().getId();
+            if (next.equals(id))
+                iterator.set(task);
         }
         throw new NoSuchTaskException("Task with id = " + id + "not found");
     }
 
     public boolean containsTask(Task task) {
-        return tasks.containsValue(task);
-
-    }
-
-    public boolean containsTask(UUID id) {
-        return tasks.containsKey(id);
+        return tasks.contains(task);
 
     }
 
@@ -94,7 +82,7 @@ public class TasksJournal implements Serializable {
                 "}";
     }
 
-    public void setTasks(Map<UUID, Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 }

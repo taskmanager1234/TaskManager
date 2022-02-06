@@ -4,14 +4,10 @@ import com.company.exception.CreateTaskException;
 import com.company.exception.DeleteTaskException;
 import com.company.exception.TaskNotFoundException;
 import com.company.model.Task;
-import com.company.model.TasksJournal;
-import com.company.repository.JournalRepository;
 import com.company.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

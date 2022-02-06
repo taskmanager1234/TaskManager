@@ -31,7 +31,7 @@ public class TaskJournalService {
     }
 
     public void create(TasksJournal tasksJournal) {
-        List<Task> tasks = new ArrayList<>(tasksJournal.getTasks().values());
+        List<Task> tasks = new ArrayList<>(tasksJournal.getTasks());
         taskRepository.createAll(tasks);
         journalRepository.create(tasksJournal);
     }

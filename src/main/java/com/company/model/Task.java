@@ -179,12 +179,10 @@ public class Task implements Serializable {
     }
 
     private static class ColumnNames {
-        public static final String ID_COLUMN = "id";
         public static final String TITLE_COLUMN = "title";
         public static final String DESCRIPTION_COLUMN = "description";
         public static final String START_DATE_COLUMN = "start_date";
         public static final String END_DATE_COLUMN = "end_date";
         public static final String REMINDER_COLUMN = "reminder";
-        public static final String ID_JOURNAL_COLUMN = "tasks_journal_id";
     }
 }

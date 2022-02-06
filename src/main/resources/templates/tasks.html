@@ -14,12 +14,12 @@
     </tr>
 
     <tr data-th-each="task : ${tasks}">
-        <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getValue().getId().toString()}}" data-th-text="${task.getValue().getTitle()}"> </a></td>
+        <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
 
         <td>
 
 
-            <form th:action="@{'/tasksJournal/'+${journalId}+'/deleteTask/'+ ${task.getValue().getId().toString()}}" method="post">
+            <form th:action="@{'/tasksJournal/'+${journalId}+'/deleteTask/'+ ${task.getId().toString()}}" method="post">
                 <script>
                     function clickHandler() {
                         window.confirm("Do you really want to delete task?");
