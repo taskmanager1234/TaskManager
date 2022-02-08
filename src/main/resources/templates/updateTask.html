@@ -6,6 +6,8 @@
 </head>
 <body>
 <h1>UpdateTask</h1>
+<!--TODO насколько я вижу, страницы addTask и updateTask имеют практически одинаковую структуру, разница только в заголовке и URL для формы.
+Я бы предложил попробовать сделать их одной параметризованной страницей, чтобы избежать дублирования кода-->
 <form th:action="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${tasks.getId().toString()}}" method="post">
     <table>
         <tr>

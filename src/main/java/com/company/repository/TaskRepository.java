@@ -30,6 +30,7 @@ public class TaskRepository {
     public void create(Task task, UUID journalId) {
         entityManager.persist(task);
         UUID taskId = task.getId();
+        //todo vlla а зачем нам отдельно запросом обновлять journal_id на таске? Мы не можем иметь поле journal_id в классе Task, чтобы обновление происходило автоматически?
         entityManager.createNativeQuery("UPDATE  task " +
                 "set journal_id =:journal_id where task.id = :task_id")
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString())
@@ -61,6 +62,7 @@ public class TaskRepository {
     }
 
     public Task getTaskByJournalIdAndTaskId(UUID taskId, UUID journalId) {
+        //todo vlla зачем нам знать journalId, чтобы получить таску? Разве taskId не достаточно для того, чтобы однозначно идентифицировать таску?
         String query = String.format("select task.* from task " +
                         "where task.journal_id = :%s and task.id = :%s",
                 QueryParameters.TASK_JOURNAL_ID,

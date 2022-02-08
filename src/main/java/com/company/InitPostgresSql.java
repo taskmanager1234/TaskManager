@@ -7,14 +7,6 @@
 //
 //public class InitPostgresSql {
 //
-////TODO magic numbers
-//    public static void init(){
-//    DataSource dataSource =  DataSourceBuilder.create()
-//            .driverClassName("org.postgresql.Driver")
-//            .url("jdbc:postgresql://localhost:5432/postgres")
-//            .username("postgres")
-//            .password("postgres")
-//            .build();
 //
 //    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 //        jdbcTemplate.execute("create table if not exists task" +

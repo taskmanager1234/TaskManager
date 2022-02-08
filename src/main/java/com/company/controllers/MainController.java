@@ -43,8 +43,10 @@ public class MainController {
         public static final String JOURNAL_ID = "id";
         public static final String TASK_ID = "taskId";
     }
+    //todo vlla лишние закомменченные блоки кода стоит удалять, чтобы они не засоряли код.
+    //У нас же есть git, даже если этот код нам когда-то зачем-то понадобится - мы сможем получить его из репозитория
     // @Autowired
-    // private CancellableScheduler scheduler;//todo что это за класс, почему его нет на git?
+    // private CancellableScheduler scheduler;
 
     @Autowired
     private TaskService taskService;
@@ -53,6 +55,8 @@ public class MainController {
 
 
     @GetMapping(value = Endpoints.TASKS)
+    //todo vlla общепринято, что назвение метода - это глагол (что делает метод).
+    // Нужно пересмотреть имена всех методов, чтобы их имена давали четкое представление о назначении метода
     public String tasks(@PathVariable UUID id, Model model) {
         TasksJournal tasksJournal = taskJournalService.getById(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, id);
@@ -61,6 +65,9 @@ public class MainController {
     }
 
 
+    //todo vlla тут вообще полная путаница. Метод GET, то есть подразумевается, что мы что-то получаем с помощью него
+    //при этом мапится он на URL addTask, как будто он должен создавать таску
+    //имя метода вообще не понятное - showCreateTask. Так show? Или create?
     @GetMapping(value = Endpoints.ADD_TASK)
     public String showCreateTask(Model model, @PathVariable String id) {
         UUID journalIdReduced = UUID.fromString(id);
@@ -68,6 +75,7 @@ public class MainController {
         return PathTemplates.ADD_TASK;
     }
 
+    //todo vlla слово post в название метода выносить незачем
     @PostMapping(value = Endpoints.ADD_TASK)
     public String addTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                               @RequestParam String title,
@@ -75,9 +83,6 @@ public class MainController {
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
     ) {
-        //todo наш web-контроллер начинает брать на себя слишком много функций. Сейчас он и делает проверки, и работате с базой, и подготавливает данные для отображения на UI.
-        // Предлагаю сократить его зону ответственности только до подготовки данных для UI, всю же логику работы с тасками\журналами вынести в отдельные классы-сервисы, TasksService, JournalsService.
-        // Сервисы не будут ничего знать о UI, они будут просто предоставялть методы работы с сущностями, CRUD, поиск и т.д.
         Task task = new Task(title, description, startDate, endDate);
         UUID journalIdReduced = UUID.fromString(idJournal);
         try {
@@ -110,7 +115,7 @@ public class MainController {
             }
         } catch (NoSuchTaskException e) {
             model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
-            return ErrorPages.NOT_FOUND;//todo каким образом пользователь сможет увидеть сообщение об ошибке?
+            return ErrorPages.NOT_FOUND;
 
         }
         return PathTemplates.UPDATE_TASK;
@@ -126,8 +131,6 @@ public class MainController {
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
                                  Model model
     ) {
-
-        //todo зачем мы создаем новый объект таски? А вдруг такой таски в базе нет? Тогда вместо update у нас произойжет create. То ли это поведение, которое мы ожидаем от этого метода?
         UUID taskIdNew = UUID.fromString(taskId);
         Task task;
         try {
