@@ -6,19 +6,23 @@
 </head>
 <body>
 <h1> TaskJournal</h1>
-<table
+<form>
+<table id="tasks"
         border="1" cellspacing="5" cellpadding="10">
     <tr>
+        <td></td>
         <td><b>Title</b></td>
         <td><b>Actions</b></td>
     </tr>
 
+
     <tr data-th-each="task : ${tasks}">
+
+        <td><input type="checkbox" th:id="${task.getId().toString()}" name="task_checkbox"></td>
+
         <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
 
         <td>
-
-
             <form th:action="@{'/tasksJournal/'+${journalId}+'/deleteTask/'+ ${task.getId().toString()}}" method="post">
                 <script>
                     function clickHandler() {
@@ -35,10 +39,39 @@
     <h1></h1>
 </section>
 <div>
-    <form th:action="@{'/tasksJournal/'+${journalId}+'/addTask/'}" >
-        <button type="submit" value="addTask"/>
-        addTask</button>
-    </form>
+
+
+        <script th:inline="javascript">
+            function getCheckedTasks(journal_id) {
+               let result = new Array();
+               let checkboxes = document.getElementsByName("task_checkbox");
+               for(let i = 0; i < checkboxes.length; ++i){
+                   if(checkboxes[i].checked === true){
+                       result.push(checkboxes.item(i).getAttribute("id"));
+                   }
+               }
+               let resultStr = result[0];
+               for(let i = 1; i< result.length; ++i){
+                   resultStr = resultStr.concat(',',result[i]);
+               }
+               let xhr = new XMLHttpRequest();
+               let endpoint = "/tasksJournal/"+ journal_id + "/deleteTasks/";
+               xhr.open("POST", endpoint);
+             <!--  xhr.onreadystatechange = function(){
+                   window.location.pathname = "/tasksJournal/"+ journal_id +"/tasks";
+               }-->
+               xhr.send(resultStr);
+
+            }
+        </script>
+        <button type="submit" value="Delete" th:onclick="getCheckedTasks([[${journalId}]])"/>
+        Delete Tasks</button>
+
 </div>
+
+</form>
+<a th:href="@{'/tasksJournal/'+${journalId}+'/addTask/'}">
+    <button type="button">Create Task</button>
+</a>
 </body>
 </html>

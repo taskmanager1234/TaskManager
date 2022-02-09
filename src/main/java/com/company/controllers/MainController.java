@@ -30,7 +30,7 @@ public class MainController {
         public static final String ADD_TASK = "/addTask";
         public static final String MAIN_PAGE = "/";
         public static final String UPDATE_TASK = "/updateTask/{taskId}";
-        public static final String DELETE_TASK = "/deleteTask/{taskId}";
+        public static final String DELETE_TASKS = "/deleteTasks";
     }
 
     private static class ModelAttributes {
@@ -152,18 +152,38 @@ public class MainController {
     }
 
 
-    @PostMapping(Endpoints.DELETE_TASK)
-    public String deleteTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal, @PathVariable(name = PathVariables.TASK_ID) String taskId, Model model) {
-        UUID taskIdNew = UUID.fromString(taskId);
-        // JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
+   // @PostMapping(Endpoints.DELETE_TASKS)
+   // public String deleteTasksPost(@RequestParam(value = "checkbox") String[] checkboxes, Model model) {
+//        UUID taskIdNew = UUID.fromString(taskId);
+//        // JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
+//
+//        try {
+//            taskService.deleteTaskById(taskIdNew);
+//        } catch (DeleteTaskException e) {
+//            model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
+//            return ErrorPages.NOT_FOUND;
+//        }
+//        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
+        //int a = 5;
+      //  return "ff";
+    //}
 
-        try {
-            taskService.deleteTaskById(taskIdNew);
-        } catch (DeleteTaskException e) {
-            model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
-            return ErrorPages.NOT_FOUND;
+    @PostMapping(Endpoints.DELETE_TASKS)
+    public String deleteTasksPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+                                  @RequestBody String ids,
+                                  Model model) {
+        String[] stringIds = ids.split(",");
+
+        for (String currentId : stringIds) {
+            try {
+                taskService.deleteTaskById(UUID.fromString(currentId));
+            } catch (DeleteTaskException e) {
+                model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
+                return ErrorPages.NOT_FOUND;
+            }
         }
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
+
 
 }

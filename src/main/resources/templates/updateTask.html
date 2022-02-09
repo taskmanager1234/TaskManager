@@ -9,24 +9,30 @@
 <!--TODO насколько я вижу, страницы addTask и updateTask имеют практически одинаковую структуру, разница только в заголовке и URL для формы.
 Я бы предложил попробовать сделать их одной параметризованной страницей, чтобы избежать дублирования кода-->
 <form th:action="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${tasks.getId().toString()}}" method="post">
+
     <table>
-        <tr>
-            <td><b>Title</b></td>
-            <td><b>Description</b></td>
-            <td><b>Task start</b></td>
-            <td><b>Task end</b></td>
-        </tr>
-        <tr>
-            <td><input type="text" name="title" th:value="${tasks.getTitle()}"></td>
-            <td><input type="text" name="description" th:value="${tasks.getDescription()}"></td>
-            <td><input type="datetime-local" name="startDate" th:value="${tasks.getStartDate().toString()}"></td>
-            <td><input type="datetime-local" name="endDate" th:value="${tasks.getEndDate.toString()}"></td>
+        <tr> <td><b>Title</b></td></tr>
+        <tr><td><input type="text" name="title" th:value="${tasks.getTitle()}"></td></tr>
+    </table>
+    <table>
+        <tr><td><b>Description</b></td></tr>
+        <tr><td><input type="text" name="description" th:value="${tasks.getDescription()}"></td></tr>
+    </table>
+    <table>
+        <tr><td><b>Task start</b></td></tr>
+        <tr><td><input type="datetime-local" name="startDate" th:value="${tasks.getStartDate().toString()}"></td>
         </tr>
     </table>
+    <table>
+        <tr><td><b>Task end</b></td></tr>
+        <tr><td><input type="datetime-local" name="endDate" th:value="${tasks.getEndDate.toString()}"></td>
+        </tr>
+    </table>
+<p></p>
     <button type ="submit">Update</button>
 </form>
 <a th:href="@{'/tasksJournal/'+${journalId}+'/tasks'}">
-    <button>Cancel</button>
+      <button>Cancel</button>
 </a>
 </body>
 </html>
