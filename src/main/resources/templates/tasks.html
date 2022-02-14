@@ -44,16 +44,26 @@
         <script th:inline="javascript">
             function getCheckedTasks(journal_id) {
                let result = new Array();
+               let rows = new Array();
                let checkboxes = document.getElementsByName("task_checkbox");
-               for(let i = 0; i < checkboxes.length; ++i){
+               let size = checkboxes.length;
+               for(let i = 0; i < size; ++i){
                    if(checkboxes[i].checked === true){
-                       result.push(checkboxes.item(i).getAttribute("id"));
+                       let currentId = checkboxes.item(i).getAttribute("id");
+                       result.push(currentId);
+                       rows.push(checkboxes.item(i).parentNode.parentNode)
                    }
                }
+               let parent = rows[0].parentNode;
                let resultStr = result[0];
                for(let i = 1; i< result.length; ++i){
                    resultStr = resultStr.concat(',',result[i]);
                }
+               let rowsCount = rows.length;
+                for(let i = 0; i < rowsCount; ++i){
+                   parent.removeChild(rows[i]);
+                }
+
                let xhr = new XMLHttpRequest();
                let endpoint = "/tasksJournal/"+ journal_id + "/deleteTasks/";
                xhr.open("POST", endpoint);
