@@ -28,13 +28,16 @@ public class MainController {
     private static class Endpoints {
         public static final String TASKS = "/tasks";
         public static final String ADD_TASK = "/addTask";
+        public static final String SHOW_TASK_CREATION_FORM = "/addTask";
         public static final String MAIN_PAGE = "/";
         public static final String UPDATE_TASK = "/updateTask/{taskId}";
+        public static final String SHOW_TASK_UPDATE_FORM = "/updateTask/{taskId}";
         public static final String DELETE_TASKS = "/deleteTasks";
     }
 
     private static class ModelAttributes {
         public static final String TASKS = "tasks";
+        public static final String TASK = "task";
         public static final String NOT_FOUND_MESSAGE = "message";
         public static final String JOURNAL_ID = "journalId";
     }
@@ -43,10 +46,6 @@ public class MainController {
         public static final String JOURNAL_ID = "id";
         public static final String TASK_ID = "taskId";
     }
-    //todo vlla лишние закомменченные блоки кода стоит удалять, чтобы они не засоряли код.
-    //У нас же есть git, даже если этот код нам когда-то зачем-то понадобится - мы сможем получить его из репозитория
-    // @Autowired
-    // private CancellableScheduler scheduler;
 
     @Autowired
     private TaskService taskService;
@@ -57,7 +56,7 @@ public class MainController {
     @GetMapping(value = Endpoints.TASKS)
     //todo vlla общепринято, что назвение метода - это глагол (что делает метод).
     // Нужно пересмотреть имена всех методов, чтобы их имена давали четкое представление о назначении метода
-    public String tasks(@PathVariable UUID id, Model model) {
+    public String getTasks(@PathVariable UUID id, Model model) {
         TasksJournal tasksJournal = taskJournalService.getById(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, id);
         model.addAttribute(ModelAttributes.TASKS, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
@@ -68,8 +67,8 @@ public class MainController {
     //todo vlla тут вообще полная путаница. Метод GET, то есть подразумевается, что мы что-то получаем с помощью него
     //при этом мапится он на URL addTask, как будто он должен создавать таску
     //имя метода вообще не понятное - showCreateTask. Так show? Или create?
-    @GetMapping(value = Endpoints.ADD_TASK)
-    public String showCreateTask(Model model, @PathVariable String id) {
+    @GetMapping(value = Endpoints.SHOW_TASK_CREATION_FORM)
+    public String showTaskCreateForm(Model model, @PathVariable String id) {
         UUID journalIdReduced = UUID.fromString(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, journalIdReduced);
         return PathTemplates.ADD_TASK;
@@ -77,7 +76,7 @@ public class MainController {
 
     //todo vlla слово post в название метода выносить незачем
     @PostMapping(value = Endpoints.ADD_TASK)
-    public String addTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+    public String createTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                               @RequestParam String title,
                               @RequestParam String description,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -86,7 +85,8 @@ public class MainController {
         Task task = new Task(title, description, startDate, endDate);
         UUID journalIdReduced = UUID.fromString(idJournal);
         try {
-            taskService.create(task, journalIdReduced);
+            task.setTasksJournal(taskJournalService.getById(journalIdReduced));
+            taskService.create(task);
         } catch (CreateTaskException e) {
             return ErrorPages.BAD_REQUEST;
         }
@@ -101,15 +101,15 @@ public class MainController {
     }
 
     //todo в REST парадигме запросы типа GET используются только для получения данных, но не для из изменения\удаления. У нас тут явно запутывающий нейминг.
-    @GetMapping(Endpoints.UPDATE_TASK)
-    public String showUpdateTaskPage(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal, @PathVariable(name = PathVariables.TASK_ID) String taskId, Model model) {
+    @GetMapping(Endpoints.SHOW_TASK_UPDATE_FORM)
+    public String showTaskUpdateForm(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal, @PathVariable(name = PathVariables.TASK_ID) String taskId, Model model) {
         try {
             UUID taskIdReduced = UUID.fromString(taskId);
             UUID journalIdReduced = UUID.fromString(idJournal);
             Task task = taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
             if (Objects.nonNull(task)) {
                 model.addAttribute(ModelAttributes.JOURNAL_ID, journalIdReduced);
-                model.addAttribute(ModelAttributes.TASKS, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
+                model.addAttribute(ModelAttributes.TASK, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
             } else {
                 throw new NoSuchTaskException("Task with id  = " + taskId + " not found in Journal with id = " + idJournal);
             }
@@ -123,7 +123,7 @@ public class MainController {
 
 
     @PostMapping(Endpoints.UPDATE_TASK)
-    public String updateTaskPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+    public String updateTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                                  @PathVariable(name = PathVariables.TASK_ID) String taskId,
                                  @RequestParam String title,
                                  @RequestParam String description,
@@ -169,7 +169,7 @@ public class MainController {
     //}
 
     @PostMapping(Endpoints.DELETE_TASKS)
-    public String deleteTasksPost(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+    public String deleteTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                                   @RequestBody String ids,
                                   Model model) {
         String[] stringIds = ids.split(",");
@@ -184,6 +184,5 @@ public class MainController {
         }
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
-
 
 }

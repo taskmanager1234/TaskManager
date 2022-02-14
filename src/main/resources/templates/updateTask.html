@@ -5,34 +5,34 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>UpdateTask</h1>
+<h1>Update Task</h1>
 <!--TODO насколько я вижу, страницы addTask и updateTask имеют практически одинаковую структуру, разница только в заголовке и URL для формы.
 Я бы предложил попробовать сделать их одной параметризованной страницей, чтобы избежать дублирования кода-->
-<form th:action="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${tasks.getId().toString()}}" method="post">
+<form th:action="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" method="post">
 
     <table>
         <tr> <td><b>Title</b></td></tr>
-        <tr><td><input type="text" name="title" th:value="${tasks.getTitle()}"></td></tr>
+        <tr><td><input type="text" name="title" th:value="${task.getTitle()}"></td></tr>
     </table>
     <table>
         <tr><td><b>Description</b></td></tr>
-        <tr><td><input type="text" name="description" th:value="${tasks.getDescription()}"></td></tr>
+        <tr><td><input type="text" name="description" th:value="${task.getDescription()}"></td></tr>
     </table>
     <table>
         <tr><td><b>Task start</b></td></tr>
-        <tr><td><input type="datetime-local" name="startDate" th:value="${tasks.getStartDate().toString()}"></td>
+        <tr><td><input type="datetime-local" name="startDate" th:value="${task.getStartDate().toString()}"></td>
         </tr>
     </table>
     <table>
         <tr><td><b>Task end</b></td></tr>
-        <tr><td><input type="datetime-local" name="endDate" th:value="${tasks.getEndDate.toString()}"></td>
+        <tr><td><input type="datetime-local" name="endDate" th:value="${task.getEndDate.toString()}"></td>
         </tr>
     </table>
 <p></p>
-    <button type ="submit">Update</button>
+    <button style="float:left; margin-right: 2px" type ="submit">Update</button>
 </form>
-<a th:href="@{'/tasksJournal/'+${journalId}+'/tasks'}">
-      <button>Cancel</button>
+<a th:href="@{'/tasksJournal/'+${journalId}+'/task'}">
+      <button style="width: 59px">Cancel</button>
 </a>
 </body>
 </html>

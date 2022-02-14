@@ -57,6 +57,11 @@ public class Task implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reminder;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "journal_id")
+    private TasksJournal tasksJournal;
+
+
 
     public Task() {
     }
@@ -176,6 +181,14 @@ public class Task implements Serializable {
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (reminder != null ? reminder.hashCode() : 0);
         return result;
+    }
+
+    public TasksJournal getTasksJournal() {
+        return tasksJournal;
+    }
+
+    public void setTasksJournal(TasksJournal tasksJournal) {
+        this.tasksJournal = tasksJournal;
     }
 
     private static class ColumnNames {

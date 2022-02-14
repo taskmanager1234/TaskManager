@@ -5,14 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<h1> TaskJournal</h1>
+<h1>Task Journal</h1>
 <form>
 <table id="tasks"
         border="1" cellspacing="5" cellpadding="10">
     <tr>
         <td></td>
         <td><b>Title</b></td>
-        <td><b>Actions</b></td>
+       <!-- <td><b>Actions</b></td>-->
     </tr>
 
 
@@ -22,7 +22,7 @@
 
         <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
 
-        <td>
+     <!--   <td>
             <form th:action="@{'/tasksJournal/'+${journalId}+'/deleteTask/'+ ${task.getId().toString()}}" method="post">
                 <script>
                     function clickHandler() {
@@ -32,7 +32,7 @@
                 <button type="submit" value="delete" onclick="clickHandler()"/>
                 Delete</button>
             </form>
-        </td>
+        </td>-->
     </tr>
 </table>
 <section>
@@ -57,21 +57,17 @@
                let xhr = new XMLHttpRequest();
                let endpoint = "/tasksJournal/"+ journal_id + "/deleteTasks/";
                xhr.open("POST", endpoint);
-             <!--  xhr.onreadystatechange = function(){
-                   window.location.pathname = "/tasksJournal/"+ journal_id +"/tasks";
-               }-->
                xhr.send(resultStr);
-
             }
         </script>
-        <button type="submit" value="Delete" th:onclick="getCheckedTasks([[${journalId}]])"/>
+        <button value="Delete" style="float:left; margin-right: 2px" th:onclick="getCheckedTasks([[${journalId}]])"/>
         Delete Tasks</button>
 
 </div>
 
 </form>
 <a th:href="@{'/tasksJournal/'+${journalId}+'/addTask/'}">
-    <button type="button">Create Task</button>
+    <button style="width: 92px" type="button">Create Task</button>
 </a>
 </body>
 </html>

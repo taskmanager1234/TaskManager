@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add Task</title>
+    <title>Create Task</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<h1> AddTask</h1>
+<h1> Create Task</h1>
 <form th:action="@{'/tasksJournal/'+${journalId}+'/addTask/'}" method="post">
     <table>
         <tr> <td><b>Title</b></td></tr>
@@ -26,7 +26,7 @@
 
 
     <p></p>
-    <button type="submit"  class="btn btn-outline-dark" >Add</button>
+    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >Add</button>
 </form>
 
 <a th:href="@{'/tasksJournal/'+${journalId}+'/tasks'}">
