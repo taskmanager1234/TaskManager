@@ -29,7 +29,6 @@ public class TaskRepository {
     @Transactional
     public void create(Task task) {
         entityManager.persist(task);
-        //todo vlla а зачем нам отдельно запросом обновлять journal_id на таске? Мы не можем иметь поле journal_id в классе Task, чтобы обновление происходило автоматически?
     }
 
     @Transactional
@@ -55,8 +54,7 @@ public class TaskRepository {
                 .setParameter(QueryParameters.ID, id.toString()).getResultList();
     }
 
-    public Task getTaskByJournalIdAndTaskId(UUID taskId) {
-        //todo vlla зачем нам знать journalId, чтобы получить таску? Разве taskId не достаточно для того, чтобы однозначно идентифицировать таску?
+    public Task getTaskByTaskId(UUID taskId) {
         String query = String.format("select task.* from task " +
                         "where task.id = :%s",
                 QueryParameters.TASK_ID);

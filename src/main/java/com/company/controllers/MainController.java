@@ -54,8 +54,6 @@ public class MainController {
 
 
     @GetMapping(value = Endpoints.TASKS)
-    //todo vlla общепринято, что назвение метода - это глагол (что делает метод).
-    // Нужно пересмотреть имена всех методов, чтобы их имена давали четкое представление о назначении метода
     public String getTasks(@PathVariable UUID id, Model model) {
         TasksJournal tasksJournal = taskJournalService.getById(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, id);
@@ -64,9 +62,7 @@ public class MainController {
     }
 
 
-    //todo vlla тут вообще полная путаница. Метод GET, то есть подразумевается, что мы что-то получаем с помощью него
-    //при этом мапится он на URL addTask, как будто он должен создавать таску
-    //имя метода вообще не понятное - showCreateTask. Так show? Или create?
+
     @GetMapping(value = Endpoints.SHOW_TASK_CREATION_FORM)
     public String showTaskCreateForm(Model model, @PathVariable String id) {
         UUID journalIdReduced = UUID.fromString(id);
@@ -74,7 +70,6 @@ public class MainController {
         return PathTemplates.ADD_TASK;
     }
 
-    //todo vlla слово post в название метода выносить незачем
     @PostMapping(value = Endpoints.ADD_TASK)
     public String createTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                               @RequestParam String title,
@@ -100,7 +95,6 @@ public class MainController {
         return PathTemplates.REDIRECT_TO_HOME;
     }
 
-    //todo в REST парадигме запросы типа GET используются только для получения данных, но не для из изменения\удаления. У нас тут явно запутывающий нейминг.
     @GetMapping(Endpoints.SHOW_TASK_UPDATE_FORM)
     public String showTaskUpdateForm(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal, @PathVariable(name = PathVariables.TASK_ID) String taskId, Model model) {
         try {
@@ -109,7 +103,7 @@ public class MainController {
             Task task = taskService.getByIdAndByJournalId(taskIdReduced, journalIdReduced);
             if (Objects.nonNull(task)) {
                 model.addAttribute(ModelAttributes.JOURNAL_ID, journalIdReduced);
-                model.addAttribute(ModelAttributes.TASK, task);//todo почему для передачи одной таски на страницу отображения параметров таски используется тот же атрибут, который используется для передачи всех тасок на страницу отображения журнала?
+                model.addAttribute(ModelAttributes.TASK, task);
             } else {
                 throw new NoSuchTaskException("Task with id  = " + taskId + " not found in Journal with id = " + idJournal);
             }

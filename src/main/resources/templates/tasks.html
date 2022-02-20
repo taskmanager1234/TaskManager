@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Task Journal</h1>
-<form>
+<form  onsubmit="return false;">
 <table id="tasks"
         border="1" cellspacing="5" cellpadding="10">
     <tr>
@@ -43,6 +43,8 @@
 
         <script th:inline="javascript">
             function getCheckedTasks(journal_id) {
+               if(!window.confirm('Do you really want to delete selected tasks?'))
+                   return false;
                let result = new Array();
                let rows = new Array();
                let checkboxes = document.getElementsByName("task_checkbox");

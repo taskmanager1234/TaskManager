@@ -45,7 +45,7 @@ public class TaskService {
     }
 
     public Task getByIdAndByJournalId(UUID taskId, UUID journalId) {
-      return taskRepository.getTaskByJournalIdAndTaskId(taskId);
+      return taskRepository.getTaskByTaskId(taskId);
     }
 
 
