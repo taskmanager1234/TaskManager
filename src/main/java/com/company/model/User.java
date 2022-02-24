@@ -17,7 +17,8 @@ import java.util.UUID;
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "id", columnDefinition = "varchar(40)")
+    @Column(name = "user_id", columnDefinition = "varchar(40)")
+    //@GeneratedValue()
    // @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
@@ -31,8 +32,11 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"),
+//    @ManyToMany(/*cascade = CascadeType.PERSIST*/ fetch = FetchType.EAGER)
+//    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 

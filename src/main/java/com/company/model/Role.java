@@ -10,14 +10,24 @@ import java.util.UUID;
 @Entity
 @Table(name = "role")
 public class Role implements GrantedAuthority {
+//    @Id
+//    @Column(columnDefinition = "varchar(40)")
+//    @Type(type = "org.hibernate.type.UUIDCharType")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(columnDefinition = "varchar(40)")
+   // @GeneratedValue(strategy = GenerationType.AUTO)
     @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(name = "role_id", columnDefinition = "varchar(40)")
     private UUID id;
     private String name;
 
-    @Transient
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
+//    @Transient
+//    @ManyToMany(mappedBy = "roles" /*, cascade = CascadeType.PERSIST*/)
+    @ManyToMany
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> users;
 
     public Role() {
