@@ -1,18 +1,13 @@
 package com.company.model;
 
 
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,7 +17,9 @@ import java.util.UUID;
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "varchar(40)")
+   // @GeneratedValue(strategy = GenerationType.AUTO)
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
     @Column(name = "username", unique = true, nullable = false)
@@ -34,7 +31,7 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -43,7 +40,22 @@ public class User implements UserDetails {
     public User() {
         this.username = "";
         this.password = "";
+        this.id = UUID.randomUUID();
     }
+
+    @OneToMany(fetch = FetchType.EAGER )
+    @JoinColumn(name = "user_id", columnDefinition = "varchar(40)")
+    private List<TasksJournal> tasksJournals;
+
+
+    public List<TasksJournal> getTasksJournals() {
+        return tasksJournals;
+    }
+
+    public void setTasksJournals(List<TasksJournal> tasksJournals) {
+        this.tasksJournals = tasksJournals;
+    }
+
 
     public void setId(UUID user_id) {
         this.id = user_id;

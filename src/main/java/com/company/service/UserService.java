@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,59 +20,54 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-    public class UserService implements UserDetailsService {
-        @PersistenceContext
-        private EntityManager em;
-        @Autowired
-        UserRepository userRepository;
-//        @Autowired
+public class UserService implements UserDetailsService {
+    @PersistenceContext
+    private EntityManager em;
+    @Autowired
+    UserRepository userRepository;
+    //        @Autowired
 //        RoleRepository roleRepository;
-        @Autowired
-        BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
-        @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            User user = userRepository.findByUsername(username);
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
 
-            if (user == null) {
-                throw new UsernameNotFoundException("User not found");
-            }
-
-            return user;
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
 
-        public User findUserById(UUID userId) {
-            User userFromDb = userRepository.findById(userId);
-            return userFromDb;
-        }
+        return user;
+    }
 
-        public List<User> allUsers() {
-            return userRepository.findAll();
-        }
+    public User findUserById(UUID userId) {
+        User userFromDb = userRepository.findById(userId);
+        return userFromDb;
+    }
 
-        public boolean saveUser(User user) {
-//            User userFromDB = userRepository.findByUsername(user.getUsername());
+    public List<User> allUsers() {
+        return userRepository.findAll();
+    }
 
-//            if (userFromDB != null) {
-//                return false;
-         //   }
+    public boolean saveUser(User user) {
 
-            user.setRoles(Collections.singleton(new Role(UUID.randomUUID(), "ROLE_USER")));
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userRepository.saveUser(user);
-            return true;
-        }
+        user.setRoles(Collections.singleton(new Role(UUID.randomUUID(), "USER")));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.saveUser(user);
+        return true;
+    }
 
-        public boolean deleteUser(UUID userId) {
+    public boolean deleteUser(UUID userId) {
 //            if (userRepository.findById(userId).isPresent()) {
-                userRepository.delete(userId);
+        userRepository.delete(userId);
 //                return true;
 //            }
-            return true;
-        }
-
-        public List<User> usergtList(Long idMin) {
-            return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                    .setParameter("paramId", idMin).getResultList();
-        }
+        return true;
     }
+
+    public List<User> usergtList(Long idMin) {
+        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
+                .setParameter("paramId", idMin).getResultList();
+    }
+}

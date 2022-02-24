@@ -16,9 +16,21 @@ public class TasksJournal implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @OneToMany(fetch = FetchType.EAGER )
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "journal_id")
     private List<Task> tasks;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id",columnDefinition = "varchar(40)")
+    private User user;
 
     public TasksJournal(UUID id, List<Task> tasks) {
         this.tasks = tasks;

@@ -1,5 +1,6 @@
 package com.company.model;
 
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -10,11 +11,13 @@ import java.util.UUID;
 @Table(name = "role")
 public class Role implements GrantedAuthority {
     @Id
+    @Column(columnDefinition = "varchar(40)")
+    @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
     private String name;
 
     @Transient
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
     private Set<User> users;
 
     public Role() {

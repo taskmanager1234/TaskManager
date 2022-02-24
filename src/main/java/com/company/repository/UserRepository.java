@@ -23,17 +23,13 @@ public class UserRepository implements UserDetailsService {
     @Autowired
     EntityManager entityManager;
 
-
-
     public User findByUsername(String username){
         try {
-            // TODO
             User user = (User) entityManager.createQuery(
                     "select distinct u from User u left join fetch u.roles where u.username = :name")
-                    .setParameter("name", username).getResultList();
+                    .setParameter("name", username).getSingleResult();
             return user;
         } catch (NoResultException e) {
-            // или вернуть пустую коллекцию
             return null;
         }
     }
@@ -85,20 +81,13 @@ public class UserRepository implements UserDetailsService {
     }
     @Transactional
     public boolean saveUser(User user) {
-//        String userName = user.getUsername();
-//        if (!(isUserExist(userName))) {
-//            String password = user.getPassword();
-//
-//            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//            String hashedPassword = passwordEncoder.encode(password);
-//            user.setPassword(hashedPassword);
-//
-//            add(user);
-//            return true;
-//        }
-//        return false;
-        entityManager.persist(user);
-        return true;
+        String userName = user.getUsername();
+        if (!(isUserExist(userName))) {
+            String password = user.getPassword();
+            add(user);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -112,9 +101,8 @@ public class UserRepository implements UserDetailsService {
 
     public boolean isUserExist(String userName) {
         BigInteger count =
-                (BigInteger) entityManager.createNativeQuery("Select count(*) from user where username = :username")
+                (BigInteger) entityManager.createNativeQuery("Select count(*) from user_t where username = :username")
                         .setParameter("username", userName).getSingleResult();
-        // передаю спасибо https://stackoverflow.com/questions/31072498/how-to-check-if-a-biginteger-is-null
         return !BigInteger.ZERO.equals(count);
    }
 

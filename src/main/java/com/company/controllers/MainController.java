@@ -12,10 +12,13 @@ import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -54,7 +57,11 @@ public class MainController {
 
 
     @GetMapping(value = Endpoints.TASKS)
-    public String getTasks(@PathVariable UUID id, Model model) {
+    public String getTasks(Authentication authentication, @PathVariable UUID id, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Current user: "+ auth.getName());
+        System.out.println("Current user: "+ auth.getAuthorities());
+        
         TasksJournal tasksJournal = taskJournalService.getById(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, id);
         model.addAttribute(ModelAttributes.TASKS, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
