@@ -14,6 +14,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "user_t")
+@NamedQueries({
+        @NamedQuery(name="User.findAllWithRoles",
+                query = "select distinct u from User u left join fetch u.roles")
+})
 public class User implements UserDetails {
 
     @Id

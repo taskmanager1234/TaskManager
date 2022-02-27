@@ -36,9 +36,9 @@ public class UserRepository implements UserDetailsService {
     }
 
 
-//    public List<User> findAll() {
-//        return entityManager.createNamedQuery("User.findAllWithRoles", User.class).getResultList();
-//    }
+    public List<User> findAll() {
+        return entityManager.createNamedQuery("User.findAllWithRoles", User.class).getResultList();
+    }
 
     @Transactional
     public void add(User entity) {

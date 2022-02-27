@@ -30,6 +30,11 @@ public class TaskJournalService {
         return tasksJournal;
     }
 
+    public List<TasksJournal> getJournalsByUserId(UUID userId) {
+        return journalRepository.getJournalsByUserId(userId);
+    }
+
+
     public void create(TasksJournal tasksJournal) {
         List<Task> tasks = new ArrayList<>(tasksJournal.getTasks());
         taskRepository.createAll(tasks);

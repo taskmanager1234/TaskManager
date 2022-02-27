@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -18,4 +19,7 @@ public class SpringConfig {
                 .createEntityManager();
         return entityManager;
     }
+
+
+
 }

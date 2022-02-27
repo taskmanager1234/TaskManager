@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+<div sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">Welcome User</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">Welcome Admin</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a th:href="@{/admin}">Посмотреть всех пользователей</a>
+
+</div>
+
+<div>
+    <table>
+        <tr>
+            <td></td>
+            <td><b>Id</b></td>
+        </tr>
+        <tr data-th-each="journal : ${journals}">
+
+            <td><input type="checkbox" th:id="${journal.getId().toString()}" name="task_checkbox"></td>
+
+            <td > <a th:href="@{'/tasksJournal/'+${journal.getId().toString()}+'/tasks'}" data-th-text="${journal.getId()}"> </a></td>
+        </tr>
+    </table>
+
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <h4><a href="/logout">Выйти</a></h4>
+</div>
+<!--isAuthenticated() - вывод инфы для аутенф пользователей -->
+<div sec:authorize="isAuthenticated()">
+    Text visible only to authenticated users.
+</div>
+Hello,
+<div sec:authentication="name"></div>
+</body>
+</html>

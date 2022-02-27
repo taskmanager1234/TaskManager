@@ -46,9 +46,9 @@ public class UserService implements UserDetailsService {
         return userFromDb;
     }
 
-//    public List<User> allUsers() {
-//        return userRepository.findAll();
-//    }
+    public List<User> allUsers() {
+        return userRepository.findAll();
+    }
 
     public boolean saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
