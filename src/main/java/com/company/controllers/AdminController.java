@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 //@RequestMapping(path = "/admin")
 @Controller
 public class AdminController {
@@ -19,15 +21,12 @@ public class AdminController {
         return "admin";
     }
 
-//    @PostMapping("/admin")
-//    public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) UUID userId,
-//                              @RequestParam(required = true, defaultValue = "" ) String action,
-//                              Model model) {
-//        if (action.equals("delete")){
-//            userService.deleteUser(userId);
-//        }
-//        return "redirect:/admin";
-//    }
+    @PostMapping("/admin/{userId}")
+    public String  deleteUser(@PathVariable(name = "userId") UUID userId) {
+            userService.deleteUser(userId);
+        return "redirect:/admin";
+    }
+
 //
 //    @GetMapping("/admin/gt/{userId}")
 //    public String  gtUser(@PathVariable("userId") Long userId, Model model) {

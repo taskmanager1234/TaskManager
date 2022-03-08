@@ -8,6 +8,7 @@ import com.company.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -48,6 +49,18 @@ public class TaskService {
       return taskRepository.getTaskByTaskId(taskId);
     }
 
+
+    public List<Task> getTasksByTitle(UUID journalId, String name){
+        return taskRepository.getTasksByNameAndJournalId(name, journalId);
+    }
+
+    public List<Task> getTasksBySubstring(UUID journalId, String name){
+        return taskRepository.getTasksBySubstringAndJournalId(name, journalId);
+    }
+
+    public List<Task> getTasksByExcludedSubstring(UUID journalId, String name){
+        return taskRepository.getTasksByExcludedSubstringAndJournalId(name, journalId);
+    }
 
     public TaskService() {
     }

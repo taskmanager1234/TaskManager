@@ -1,5 +1,7 @@
 package com.company.service;
 
+import com.company.exception.CreateTaskException;
+import com.company.exception.DeleteTaskException;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.repository.JournalRepository;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -30,6 +33,7 @@ public class TaskJournalService {
         return tasksJournal;
     }
 
+
     public List<TasksJournal> getJournalsByUserId(UUID userId) {
         return journalRepository.getJournalsByUserId(userId);
     }
@@ -39,6 +43,13 @@ public class TaskJournalService {
         List<Task> tasks = new ArrayList<>(tasksJournal.getTasks());
         taskRepository.createAll(tasks);
         journalRepository.create(tasksJournal);
+    }
+
+    public void deleteJournalById(UUID id) throws DeleteTaskException {
+        TasksJournal journal = journalRepository.findById(id);
+        if (Objects.isNull(journal))
+            throw new DeleteTaskException("No such task found with id" + id);
+        journalRepository.delete(journal);
     }
 
     public TaskJournalService() {

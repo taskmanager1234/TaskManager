@@ -10,6 +10,7 @@ import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -18,8 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -82,7 +84,8 @@ public class MainController {
                               @RequestParam String title,
                               @RequestParam String description,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                             Model model
     ) {
         Task task = new Task(title, description, startDate, endDate);
         UUID journalIdReduced = UUID.fromString(idJournal);
@@ -92,6 +95,7 @@ public class MainController {
         } catch (CreateTaskException e) {
             return ErrorPages.BAD_REQUEST;
         }
+        model.addAttribute("journal_id", journalIdReduced);
         //scheduler.scheduleTask(task);
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
@@ -184,6 +188,25 @@ public class MainController {
             }
         }
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
+    }
+
+    @PostMapping(value = "/searchTasks")
+    public String searchTasks(@RequestParam("title") String title,
+                                @PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+                                @RequestParam("search_option") String searchOption,
+                                Model model){
+        UUID idJournal1 = UUID.fromString(idJournal);
+        List<Task> tasks = new ArrayList<>();
+        if(searchOption.contains("equals"))
+             tasks = taskService.getTasksByTitle(idJournal1, title);
+        else if(searchOption.equals("contains"))
+             tasks = taskService.getTasksBySubstring(idJournal1, title);
+        else
+             tasks = taskService.getTasksByExcludedSubstring(idJournal1, title);
+
+        model.addAttribute("tasks", tasks);
+        return "tasks";
+
     }
 
 }

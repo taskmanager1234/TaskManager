@@ -62,6 +62,30 @@ public class TaskRepository {
                 .setParameter(QueryParameters.TASK_ID, taskId.toString()).getSingleResult();
     }
 
+    public List<Task> getTasksByNameAndJournalId(String name, UUID journalId){
+       return (List<Task>) entityManager.createNativeQuery(
+                "select task.* from task where task.title = :name and task.journal_id = :journal_id", Task.class)
+                .setParameter("name", name)
+                .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
+
+    }
+
+    public List<Task> getTasksBySubstringAndJournalId(String substring, UUID journalId){
+        return (List<Task>) entityManager.createNativeQuery(
+                "select task.* from task where task.title like :substring and task.journal_id = :journal_id", Task.class)
+                .setParameter("substring", "%" + substring + "%")
+                .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
+
+    }
+
+    public List<Task> getTasksByExcludedSubstringAndJournalId(String substring, UUID journalId){
+        return (List<Task>) entityManager.createNativeQuery(
+                "select task.* from task where task.title not like :substring and task.journal_id = :journal_id", Task.class)
+                .setParameter("substring", "%" + substring + "%")
+                .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
+
+    }
+
 
 //    public List<Task> getTasksByJournalId(UUID id) {
 //       // return entityManager.createNativeQuery("SELECT * FROM Task WHERE tasks_journal_id = :id").setParameter("id", id).getResultList();

@@ -9,9 +9,10 @@
 <div>
     <table cellspacing="2" border="1" cellpadding="5" >
         <tr>
-        <td>UserName</td>
+        <td>Username</td>
 <!--        <td>Password</td>-->
         <td>Roles</td>
+            <td>Delete</td>
         </tr>
 
 
@@ -25,9 +26,17 @@
                     </tr>
             </table>
         </td>
+               <td>
+          <form th:action="@{'/admin/'+${user.id}}" method="post">
+              <button type="submit" value="delete" onclick="clickHandler()"/>
+              Delete</button>
+          </form>
+      </td>
             </tr>
     </table>
-
+    <a th:href="@{'/home'}">
+        <button style="width: 59px">Cancel</button>
+    </a>
 
 </body>
 </html>

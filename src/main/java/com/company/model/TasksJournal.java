@@ -32,14 +32,25 @@ public class TasksJournal implements Serializable {
     @JoinColumn(name = "user_id",columnDefinition = "varchar(40)")
     private User user;
 
+    public String getJournalName() {
+        return journalName;
+    }
+
+    @Basic
+    @Column(name = "journal_name", nullable = false, length = 110)
+    private String journalName;
+
     public TasksJournal(UUID id, List<Task> tasks) {
         this.tasks = tasks;
         this.id = Objects.isNull(id) ? UUID.randomUUID() : id;
     }
 
-    public TasksJournal() {
+    public TasksJournal(String journalName) {
+        this.journalName = journalName;
         this.tasks = new ArrayList<>();
+        this.id = Objects.isNull(id) ? UUID.randomUUID() : id;
     }
+    public TasksJournal(){}
 
     public UUID getId() {
         return id;
@@ -50,6 +61,10 @@ public class TasksJournal implements Serializable {
     }
 
     public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setIdUser(UUID id) {
         this.id = id;
     }
 

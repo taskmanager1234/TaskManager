@@ -6,6 +6,42 @@
 </head>
 <body>
 <h1>Task Journal</h1>
+<form th:action="@{'/tasksJournal/'+${id}+'/searchTasks'}" method="post">
+    <table>
+        <tr>
+            <td>
+                <b>Search by title</b>
+            </td>
+        </tr>
+        <tr>
+            <td><select name="search_option">
+                <option name="equals">equals</option>
+                <option name="contains">contains</option>
+                <option name="not contains">not contains</option>
+            </select></td>
+            <td>
+                <input type="text" name="title" placeholder="Введите название таски">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >Search</button>
+            </td>
+
+        </tr>
+    </table>
+
+   <!-- <p></p>
+    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >Search</button>
+    <table>
+    <tr data-th-each="task : ${tasks}">
+
+        <td><input type="checkbox" th:id="${task.getId().toString()}" name="task_checkbox"></td>
+
+        <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
+    </tr>
+    </table>-->
+</form>
 <form  onsubmit="return false;">
 <table id="tasks"
         border="1" cellspacing="5" cellpadding="10">
@@ -37,8 +73,6 @@
     <h1></h1>
 </section>
 <div>
-
-
         <script th:inline="javascript">
             function getCheckedTasks(journal_id) {
                if(!window.confirm('Do you really want to delete selected tasks?'))
@@ -78,6 +112,9 @@
 </form>
 <a th:href="@{'/tasksJournal/'+${journalId}+'/addTask/'}">
     <button style="width: 92px" type="button">Create Task</button>
+</a>
+<a th:href="@{'/home'}">
+    <button style="width: 59px">Cancel</button>
 </a>
 </body>
 </html>
