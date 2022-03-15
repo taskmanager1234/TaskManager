@@ -8,6 +8,7 @@ import com.company.exception.NoSuchTaskException;
 import com.company.exception.TaskNotFoundException;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
+import com.company.service.SearchService;
 import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
 import lombok.var;
@@ -38,6 +39,7 @@ public class MainController {
         public static final String UPDATE_TASK = "/updateTask/{taskId}";
         public static final String SHOW_TASK_UPDATE_FORM = "/updateTask/{taskId}";
         public static final String DELETE_TASKS = "/deleteTasks";
+        public static final String SEARCH_TASKS = "/searchTasks";
     }
 
     private static class ModelAttributes {
@@ -50,26 +52,30 @@ public class MainController {
     private static class PathVariables {
         public static final String JOURNAL_ID = "id";
         public static final String TASK_ID = "taskId";
+        public static final String VALUE = "value";
+        public static final String FIELD = "field";
+        public static final String SEARCH_OPTION = "search_option";
+
     }
 
     @Autowired
     private TaskService taskService;
     @Autowired
     private TaskJournalService taskJournalService;
-
+    @Autowired
+    private SearchService searchService;
 
     @GetMapping(value = Endpoints.TASKS)
     public String getTasks(Authentication authentication, @PathVariable UUID id, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Current user: "+ auth.getName());
-        System.out.println("Current user: "+ auth.getAuthorities());
-        
+        System.out.println("Current user: " + auth.getName());
+        System.out.println("Current user: " + auth.getAuthorities());
+
         TasksJournal tasksJournal = taskJournalService.getById(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, id);
         model.addAttribute(ModelAttributes.TASKS, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
         return PathTemplates.TASKS;
     }
-
 
 
     @GetMapping(value = Endpoints.SHOW_TASK_CREATION_FORM)
@@ -81,10 +87,10 @@ public class MainController {
 
     @PostMapping(value = Endpoints.ADD_TASK)
     public String createTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                              @RequestParam String title,
-                              @RequestParam String description,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                             @RequestParam String title,
+                             @RequestParam String description,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
                              Model model
     ) {
         Task task = new Task(title, description, startDate, endDate);
@@ -129,12 +135,12 @@ public class MainController {
 
     @PostMapping(Endpoints.UPDATE_TASK)
     public String updateTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                                 @PathVariable(name = PathVariables.TASK_ID) String taskId,
-                                 @RequestParam String title,
-                                 @RequestParam String description,
-                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-                                 Model model
+                             @PathVariable(name = PathVariables.TASK_ID) String taskId,
+                             @RequestParam String title,
+                             @RequestParam String description,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                             Model model
     ) {
         UUID taskIdNew = UUID.fromString(taskId);
         Task task;
@@ -157,8 +163,8 @@ public class MainController {
     }
 
 
-   // @PostMapping(Endpoints.DELETE_TASKS)
-   // public String deleteTasksPost(@RequestParam(value = "checkbox") String[] checkboxes, Model model) {
+    // @PostMapping(Endpoints.DELETE_TASKS)
+    // public String deleteTasksPost(@RequestParam(value = "checkbox") String[] checkboxes, Model model) {
 //        UUID taskIdNew = UUID.fromString(taskId);
 //        // JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
 //
@@ -169,14 +175,14 @@ public class MainController {
 //            return ErrorPages.NOT_FOUND;
 //        }
 //        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
-        //int a = 5;
-      //  return "ff";
+    //int a = 5;
+    //  return "ff";
     //}
 
     @PostMapping(Endpoints.DELETE_TASKS)
     public String deleteTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                                  @RequestBody String ids,
-                                  Model model) {
+                              @RequestBody String ids,
+                              Model model) {
         String[] stringIds = ids.split(",");
 
         for (String currentId : stringIds) {
@@ -190,22 +196,21 @@ public class MainController {
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
 
-    @PostMapping(value = "/searchTasks")
-    public String searchTasks(@RequestParam("title") String title,
-                                @PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                                @RequestParam("search_option") String searchOption,
-                                Model model){
+    @PostMapping(Endpoints.SEARCH_TASKS)
+    public String searchTasks(@RequestParam(PathVariables.VALUE) String value,
+                              @PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+                              @RequestParam(PathVariables.SEARCH_OPTION) String searchOption,
+                              @RequestParam(PathVariables.FIELD) String field,
+                              Model model) {
         UUID idJournal1 = UUID.fromString(idJournal);
-        List<Task> tasks = new ArrayList<>();
-        if(searchOption.contains("equals"))
-             tasks = taskService.getTasksByTitle(idJournal1, title);
-        else if(searchOption.equals("contains"))
-             tasks = taskService.getTasksBySubstring(idJournal1, title);
-        else
-             tasks = taskService.getTasksByExcludedSubstring(idJournal1, title);
+        List<Task> tasks;
+        SearchService.Field field1 = SearchService.Field.valueOf(field.toUpperCase());
+        SearchService.Condition condition = SearchService.Condition.valueOf(searchOption.toUpperCase());
+        SearchService.Criterion criterion = new SearchService.Criterion(field1, condition);
+        tasks = searchService.searchTasksByCriterion(criterion, value, idJournal1);
 
-        model.addAttribute("tasks", tasks);
-        return "tasks";
+        model.addAttribute(ModelAttributes.TASKS, tasks);
+        return PathTemplates.TASKS;
 
     }
 

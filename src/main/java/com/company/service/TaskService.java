@@ -14,8 +14,12 @@ import java.util.UUID;
 
 @Service
 public class TaskService {
+   private final TaskRepository taskRepository;
+
     @Autowired
-    TaskRepository taskRepository;
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     public Task getById(UUID id) throws TaskNotFoundException {
       Task task = taskRepository.findById(id);
@@ -50,18 +54,5 @@ public class TaskService {
     }
 
 
-    public List<Task> getTasksByTitle(UUID journalId, String name){
-        return taskRepository.getTasksByNameAndJournalId(name, journalId);
-    }
 
-    public List<Task> getTasksBySubstring(UUID journalId, String name){
-        return taskRepository.getTasksBySubstringAndJournalId(name, journalId);
-    }
-
-    public List<Task> getTasksByExcludedSubstring(UUID journalId, String name){
-        return taskRepository.getTasksByExcludedSubstringAndJournalId(name, journalId);
-    }
-
-    public TaskService() {
-    }
 }

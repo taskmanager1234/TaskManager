@@ -1,6 +1,8 @@
 package com.company.repository;
 
 import com.company.model.Task;
+import com.company.service.SearchService;
+import com.company.service.SearchService.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +17,9 @@ public class TaskRepository {
         public static final String ID = "id";
         public static final String TASK_JOURNAL_ID = "journal_id";
         public static final String TASK_ID = "task_id";
+        public static final String VALUE = "value";
     }
+
 
     @Autowired
     private EntityManager entityManager;
@@ -48,8 +52,8 @@ public class TaskRepository {
         entityManager.remove(task);
     }
 
-
-    public List getTasksByJournalId(UUID id) {
+    @SuppressWarnings("unchecked")
+    public List<Task> getTasksByJournalId(UUID id) {
         return entityManager.createNativeQuery("select task.* from task where task.journal_id = :id", Task.class)
                 .setParameter(QueryParameters.ID, id.toString()).getResultList();
     }
@@ -62,26 +66,18 @@ public class TaskRepository {
                 .setParameter(QueryParameters.TASK_ID, taskId.toString()).getSingleResult();
     }
 
-    public List<Task> getTasksByNameAndJournalId(String name, UUID journalId){
-       return (List<Task>) entityManager.createNativeQuery(
-                "select task.* from task where task.title = :name and task.journal_id = :journal_id", Task.class)
-                .setParameter("name", name)
-                .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
+    @SuppressWarnings("unchecked")
+    public List<Task> getTasksByCondition(SearchService.Criterion criterion, String value, UUID journalId) {
 
-    }
 
-    public List<Task> getTasksBySubstringAndJournalId(String substring, UUID journalId){
+        if (criterion.getCondition().equals(Condition.CONTAINS) || criterion.getCondition().equals(Condition.NOT_CONTAINS))
+            value = "%" + value + "%";
+
+        String query = "select task.* from task where " + criterion.getCriterionString();
+
         return (List<Task>) entityManager.createNativeQuery(
-                "select task.* from task where task.title like :substring and task.journal_id = :journal_id", Task.class)
-                .setParameter("substring", "%" + substring + "%")
-                .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
-
-    }
-
-    public List<Task> getTasksByExcludedSubstringAndJournalId(String substring, UUID journalId){
-        return (List<Task>) entityManager.createNativeQuery(
-                "select task.* from task where task.title not like :substring and task.journal_id = :journal_id", Task.class)
-                .setParameter("substring", "%" + substring + "%")
+                query, Task.class)
+                .setParameter(QueryParameters.VALUE, value)
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
 
     }

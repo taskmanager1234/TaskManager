@@ -7,18 +7,19 @@
 </head>
 <body>
 
-<div sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">Welcome User</div>
-<div sec:authorize="hasRole('ROLE_ADMIN')">Welcome Admin</div>
+<h1><div sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">Welcome User</div></h1>
+<h1><div sec:authorize="hasRole('ROLE_ADMIN')">Welcome Admin</div></h1>
 <div sec:authorize="hasRole('ROLE_ADMIN')">
     <a th:href="@{/admin}">Посмотреть всех пользователей</a>
-
 </div>
 
+
 <div>
-    <table>
+    <br>
+    <table border="1" cellspacing="5" cellpadding="10">
         <tr>
             <td></td>
-            <td><b>Id</b></td>
+            <td><b>Journal name</b></td>
         </tr>
         <tr data-th-each="journal : ${journals}">
 
@@ -29,8 +30,8 @@
     </table>
 </div>
 
-<a th:href="@{'/tasksJournal/addJournal'}">
-    <button style="width: 92px" type="button">Create Journal</button>
+<br><a th:href="@{'/tasksJournal/addJournal'}">
+    <button  style="float:left" type="button">Create Journal</button>
 </a>
 
 <form onsubmit="return false;">
@@ -66,19 +67,19 @@
             xhr.send(resultStr);
         }
     </script>
-    <button value="Delete" style="float:left; margin-right: 2px" th:onclick="getCheckedTasks()"/>
+    <button value="Delete" style="float:left; margin-left:2px" th:onclick="getCheckedTasks()"/>
     Delete Journal</button>
 
 </div>
 </form>
-<div sec:authorize="isAuthenticated()">
+<br> <div sec:authorize="isAuthenticated()">
     <h4><a href="/logout">Выйти</a></h4>
 </div>
-<!--isAuthenticated() - вывод инфы для аутенф пользователей -->
-<div sec:authorize="isAuthenticated()">
-    Text visible only to authenticated users.
-</div>
-Hello,
-<div sec:authentication="name"></div>
+<!--&lt;!&ndash;isAuthenticated() - вывод инфы для аутенф пользователей &ndash;&gt;-->
+<!--<div sec:authorize="isAuthenticated()">-->
+<!--    Text visible only to authenticated users.-->
+<!--</div>-->
+<!--Hello,-->
+<!--<div sec:authentication="name"></div>-->
 </body>
 </html>
