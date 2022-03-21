@@ -37,10 +37,14 @@ public class JournalRepository {
     }
 
 
-//    public TasksJournal findById(UUID id) {
+    //    public TasksJournal findById(UUID id) {
 //        return (TasksJournal) entityManager.createQuery("SELECT t FROM TasksJournal t WHERE t.id = :id").setParameter("id", id).getSingleResult();
 //
 //    }
+    @SuppressWarnings("unchecked")
+    public List<TasksJournal> getJournals(){
+       return entityManager.createNativeQuery("select * from task_journal", TasksJournal.class).getResultList();
+    }
 
     @Transactional
     public void create(TasksJournal tasksJournal) {

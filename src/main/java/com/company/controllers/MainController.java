@@ -11,7 +11,9 @@ import com.company.model.TasksJournal;
 import com.company.service.SearchService;
 import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
-import lombok.var;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -21,7 +23,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class MainController {
         public static final String SHOW_TASK_UPDATE_FORM = "/updateTask/{taskId}";
         public static final String DELETE_TASKS = "/deleteTasks";
         public static final String SEARCH_TASKS = "/searchTasks";
+        public static final String SWAP_TASKS = "/swapTasks";
     }
 
     private static class ModelAttributes {
@@ -74,6 +76,8 @@ public class MainController {
         TasksJournal tasksJournal = taskJournalService.getById(id);
         model.addAttribute(ModelAttributes.JOURNAL_ID, id);
         model.addAttribute(ModelAttributes.TASKS, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
+        List<TasksJournal> tasksJournals = taskJournalService.getJournals();
+        model.addAttribute("journals", tasksJournals);
         return PathTemplates.TASKS;
     }
 
@@ -213,5 +217,38 @@ public class MainController {
         return PathTemplates.TASKS;
 
     }
+
+    @PostMapping(value = Endpoints.SWAP_TASKS)
+    public String swapTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+                              @RequestBody String params,
+                              Model model) {
+        try {
+            JsonNode jsonParams = new ObjectMapper().readTree(params);
+            String ids = jsonParams.get("ids").asText();
+            String[] stringIds = ids.split(",");
+            String journalIdForImport = jsonParams.get("journal_to").asText();
+
+            // бизнес-логика
+
+
+
+        } catch (JsonProcessingException e) {
+            //model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
+            return ErrorPages.BAD_REQUEST;
+        }
+
+
+//        for (String currentId : stringIds) {
+//            try {
+//                taskService.deleteTaskById(UUID.fromString(currentId));
+//            } catch (DeleteTaskException e) {
+//                model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
+//                return ErrorPages.NOT_FOUND;
+//            }
+//        }
+        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
+    }
+
+
 
 }

@@ -38,6 +38,10 @@ public class TaskJournalService {
         return journalRepository.getJournalsByUserId(userId);
     }
 
+    public List<TasksJournal> getJournals() {
+        return journalRepository.getJournals();
+    }
+
 
     public void create(TasksJournal tasksJournal) {
         List<Task> tasks = new ArrayList<>(tasksJournal.getTasks());
