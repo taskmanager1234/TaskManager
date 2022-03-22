@@ -58,6 +58,7 @@ public class TaskRepository {
                 .setParameter(QueryParameters.ID, id.toString()).getResultList();
     }
 
+
     @Transactional
     public void updateJournalIdInTasks(UUID id, String ids) {
 
