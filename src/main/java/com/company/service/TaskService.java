@@ -34,6 +34,10 @@ public class TaskService {
         taskRepository.create(task);
     }
 
+    public void updateJournalIdInTasks(UUID journalIdForMoveTasks, String ids){
+        taskRepository.updateJournalIdInTasks(journalIdForMoveTasks, ids);
+    }
+
     public void delete(Task task)  {
         taskRepository.delete(task);
     }

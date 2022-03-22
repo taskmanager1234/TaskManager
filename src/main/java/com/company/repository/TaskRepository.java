@@ -58,6 +58,15 @@ public class TaskRepository {
                 .setParameter(QueryParameters.ID, id.toString()).getResultList();
     }
 
+    @Transactional
+    public void updateJournalIdInTasks(UUID id, String ids) {
+
+         entityManager.createNativeQuery("UPDATE task set journal_id = :id where task.id in (:ids)  ", Task.class).
+                 setParameter(QueryParameters.ID, id.toString()).
+                 setParameter("ids", ids)
+                 .executeUpdate();
+    }
+
     public Task getTaskByTaskId(UUID taskId) {
         String query = String.format("select task.* from task " +
                         "where task.id = :%s",

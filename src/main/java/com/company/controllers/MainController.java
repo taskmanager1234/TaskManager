@@ -220,35 +220,28 @@ public class MainController {
 
     @PostMapping(value = Endpoints.SWAP_TASKS)
     public String swapTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                              @RequestBody String params,
-                              Model model) {
+                            @RequestBody String params,
+                            Model model) {
         try {
             JsonNode jsonParams = new ObjectMapper().readTree(params);
             String ids = jsonParams.get("ids").asText();
             String[] stringIds = ids.split(",");
             String journalIdForImport = jsonParams.get("journal_to").asText();
 
-            // бизнес-логика
+            UUID idJournalConverted = UUID.fromString(idJournal);
+            UUID journalIdForImportConverted = UUID.fromString(journalIdForImport);
 
-
-
+            for (int i = 0; i < stringIds.length; ++i) {
+                taskService.updateJournalIdInTasks(journalIdForImportConverted, stringIds[i]);
+            }
+            return String.format(PathTemplates.REDIRECT_TO_HOME, journalIdForImportConverted);
         } catch (JsonProcessingException e) {
             //model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
             return ErrorPages.BAD_REQUEST;
         }
 
 
-//        for (String currentId : stringIds) {
-//            try {
-//                taskService.deleteTaskById(UUID.fromString(currentId));
-//            } catch (DeleteTaskException e) {
-//                model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
-//                return ErrorPages.NOT_FOUND;
-//            }
-//        }
-        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
-
 
 
 }
