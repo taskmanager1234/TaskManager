@@ -34,7 +34,7 @@ public class TaskService {
         taskRepository.create(task);
     }
 
-    public void updateJournalIdInTasks(UUID journalIdForMoveTasks, String ids){
+    public void updateJournalIdInTasks(String journalIdForMoveTasks, List<String> ids){
         taskRepository.updateJournalIdInTasks(journalIdForMoveTasks, ids);
     }
 

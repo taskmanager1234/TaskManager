@@ -60,11 +60,11 @@ public class TaskRepository {
 
 
     @Transactional
-    public void updateJournalIdInTasks(UUID id, String ids) {
+    public void updateJournalIdInTasks(String idJournal, List<String> tasksIds) {
 
-         entityManager.createNativeQuery("UPDATE task set journal_id = :id where task.id in (:ids)  ", Task.class).
-                 setParameter(QueryParameters.ID, id.toString()).
-                 setParameter("ids", ids)
+         entityManager.createNativeQuery("UPDATE task set journal_id = :id where task.id in (:ids)", Task.class)
+                 .setParameter(QueryParameters.ID, idJournal)
+                 .setParameter("ids", tasksIds)
                  .executeUpdate();
     }
 

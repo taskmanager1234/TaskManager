@@ -9,10 +9,10 @@
 <form th:action="@{'/tasksJournal/'+${id}+'/searchTasks'}" method="post">
     <table>
         <tr>
+            <div>
             <td>
-                <b>Search by title</b>
+                <b style="float:left">Search by title</b>
             </td>
-        </tr>
 <!--        <tr><td><b>Value</b></td></tr>-->
 <!--        <tr><td><input type="text" name="value" placeholder="Название поля"></td></tr>-->
 <!--        <tr>-->
@@ -24,6 +24,7 @@
             <td>
                 <input type="text" name="value" placeholder="Введите название таски">
             </td>
+            </div>
         </tr>
                 <tr><td><b>Field</b></td></tr>
                 <tr><td><input type="text" name="field" placeholder="Название поля"></td></tr>
@@ -36,28 +37,9 @@
         </tr>
     </table>
 
-   <!-- <p></p>
-    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >Search</button>
-    <table>
-    <tr data-th-each="task : ${tasks}">
-
-        <td><input type="checkbox" th:id="${task.getId().toString()}" name="task_checkbox"></td>
-
-        <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
-    </tr>
-    </table>-->
 </form>
 
 <form th:action="@{'/tasksJournal/'+${id}+'/swapTasks'}" method="post">
-
-    <select name="journal" id="journal">
-        <option value="0">select journal</option>
-        <option data-th-each="journal: ${journals}" th:text="${journal.getJournalName()}" th:value="${journal.getId().toString()}"></option>
-    </select>
-    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >send</button>
-</form>
-
-<form  onsubmit="return false;">
 <table id="tasks"
         border="1" cellspacing="5" cellpadding="10">
     <tr>
@@ -67,101 +49,43 @@
     </tr>
     <tr data-th-each="task : ${tasks}">
 
-        <td><input type="checkbox" th:id="${task.getId().toString()}" name="task_checkbox"></td>
+        <td><input type="checkbox" th:value="${task.getId().toString()}" name="task_checkbox"></td>
 
         <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
-
-     <!--   <td>
-            <form th:action="@{'/tasksJournal/'+${journalId}+'/deleteTask/'+ ${task.getId().toString()}}" method="post">
-                <script>
-                    function clickHandler() {
-                        window.confirm("Do you really want to delete task?");
-                    }
-                </script>
-                <button type="submit" value="delete" onclick="clickHandler()"/>
-                Delete</button>
-            </form>
-        </td>-->
     </tr>
 </table>
+
 <section>
     <h1></h1>
 </section>
+
 <div>
-        <script th:inline="javascript">
-            function getCheckedTasks(str1,journal_id,str2, params) { // params like "param1=1234", "param2=test"
-               let result = new Array();
-               let rows = new Array();
-               let checkboxes = document.getElementsByName("task_checkbox");
-               let size = checkboxes.length;
-               for(let i = 0; i < size; ++i) {
-                   if(checkboxes[i].checked === true) {
-                       let currentId = checkboxes.item(i).getAttribute("id");
-                       result.push(currentId);
-                       rows.push(checkboxes.item(i).parentNode.parentNode)
-                   }
-               }
-               let parent = rows[0].parentNode;
-               let resultStr = result[0];
-               for(let i = 1; i< result.length; ++i) {
-                   resultStr = resultStr.concat(',',result[i]);
-               }
-               let rowsCount = rows.length;
-                for(let i = 0; i < rowsCount; ++i) {
-                   parent.removeChild(rows[i]);
-                }
-
-                // Generate body
-                let body = "{\"ids\": \"" + resultStr;
-                if (params !== null) {
-                    body = body + "\","
-                    for (let i = 0; i < params.length; ++i) {
-                        let paramAndValue = params[i].split("="); // param1=value1 -> [param1, value1]
-                        let param = paramAndValue[0];
-                        let value = paramAndValue[1];
-                        param = "\"" + param + "\""
-                        value = "\"" + value + "\""
-                        let newJsonField = param + ": " + value
-                        body = body + newJsonField
-
-                        if (i !== params.length - 1)
-                            body = body + ","
-                    }
-                }
-                body = body + "}"
-
-               let xhr = new XMLHttpRequest();
-               let endpoint = str1 + journal_id + str2;
-               xhr.open("POST", endpoint);
-               xhr.send(body);
-            }
-            function deleteCheckedTasks(str1,journal_id,str2) {
-                if(!window.confirm('Do you really want to delete selected tasks?'))
-                    return false;
-                getCheckedTasks(str1,journal_id,str2,null)
-            }
-            function swapCheckedTasks(str1,journal_id,str2) {
-                let selectedJournal = document.getElementById("journal").value;
-                let param = "journal_to=" + selectedJournal;
-                let params = [param];
-                getCheckedTasks(str1,journal_id,str2, params);
-            }
-        </script>
-       <!-- <button value="Delete" style="float:left; margin-right: 2px" th:onclick="getCheckedTasks('/tasksJournal/', [[${journalId}]], '/deleteTasks/')"/>Delete Tasks</button>-->
-    <input type="submit"  value="Delete" th:onclick="deleteCheckedTasks('/tasksJournal/', [[${journalId}]], '/deleteTasks/')"/>
-    <input type="submit"  value="Swap" th:onclick="swapCheckedTasks('/tasksJournal/', [[${journalId}]], '/swapTasks')"/>
-
-
-
-
+    <input style="width: 57.5px; margin-right: 3px; float:left" th:formaction="@{/tasksJournal/{id}/MultipleForm (id = ${id})}" type="submit" name="btn_submit"  value="Delete" >
 </div>
 
-</form>
+
+
 <a th:href="@{'/tasksJournal/'+${journalId}+'/addTask/'}">
     <button style="width: 92px" type="button">Create Task</button>
 </a>
 <a th:href="@{'/home'}">
     <button style="width: 59px">Cancel</button>
 </a>
+    <form th:action="@{'/tasksJournal/'+${id}+'/swapTasks'}" method="post">
+<table>
+    <tr>
+        <td>Select a journal to move:</td>
+        <td>
+            <select style="" name="selected_journal" id="journal_id">
+                <option value="0">select journal</option>
+                <option data-th-each="journal: ${journals}" th:text="${journal.getJournalName()}" th:value="${journal.getId().toString()}"></option>
+            </select>
+        </td>
+        <td>
+            <input type="submit"  value="Swap" >
+        </td>
+    </tr>
+</table>
+</form>
 </body>
 </html>

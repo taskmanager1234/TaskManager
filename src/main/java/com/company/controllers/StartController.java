@@ -8,6 +8,7 @@ import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.model.User;
 import com.company.service.TaskJournalService;
+import com.company.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -26,17 +28,20 @@ public class StartController {
     @Autowired
     TaskJournalService taskJournalService;
 
+    @Autowired
+    TaskService taskService;
+
     private static class PathVariables {
         public static final String JOURNAL_ID = "id";
         public static final String TASK_ID = "taskId";
     }
 
     @GetMapping(value = "/home")
-    public String get(Model model){
+    public String get(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = auth.getPrincipal();
         UUID id = ((User) (principal)).getId();
-        model.addAttribute("journals",taskJournalService.getJournalsByUserId(id));
+        model.addAttribute("journals", taskJournalService.getJournalsByUserId(id));
         return "home";
     }
 
@@ -47,7 +52,7 @@ public class StartController {
 
     @PostMapping(value = "/tasksJournal/addJournal")
     public String createJournal(@RequestParam("title") String title, Model model
-    ){
+    ) {
         TasksJournal tasksJournal = new TasksJournal(title);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = auth.getPrincipal();
@@ -74,6 +79,23 @@ public class StartController {
         return "redirect:/home";
     }
 
+//    @PostMapping("/MultipleForm")
+//    public String checkboxes(//@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
+//            @RequestParam(name = "task_checkbox") String[] ids, Model model) {
+//        int a =5;
+//        for (String currentId : ids) {
+//            try {
+//                taskService.deleteTaskById(UUID.fromString(currentId));
+//            } catch (DeleteTaskException e) {
+//                model.addAttribute("message", e.getMessage());
+//                return ErrorPages.NOT_FOUND;
+//            }
+//        }
+//        return null;
+//        //return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
+//
+//
+//    }
 
 
 //    @PostMapping(value = "/home/{journalId}/addJournal")

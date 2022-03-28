@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -60,15 +61,28 @@ public class MainController {
 
     }
 
+    public static class JsonKey {
+        public static final String JOURNAL_ID_FOR_IMPORT = "journal_to";
+        public static final String TASKS_SWAP = "ids";
+    }
+
+    public static class REGEX {
+        public static final String COMMA = ",";
+    }
+
+    private final TaskService taskService;
+    private final TaskJournalService taskJournalService;
+    private final SearchService searchService;
+
     @Autowired
-    private TaskService taskService;
-    @Autowired
-    private TaskJournalService taskJournalService;
-    @Autowired
-    private SearchService searchService;
+    public MainController(TaskService taskService, TaskJournalService taskJournalService, SearchService searchService) {
+        this.taskService = taskService;
+        this.taskJournalService = taskJournalService;
+        this.searchService = searchService;
+    }
 
     @GetMapping(value = Endpoints.TASKS)
-    public String getTasks(Authentication authentication, @PathVariable UUID id, Model model) {
+    public String showTaskManager(Authentication authentication, @PathVariable UUID id, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Current user: " + auth.getName());
         System.out.println("Current user: " + auth.getAuthorities());
@@ -183,13 +197,12 @@ public class MainController {
     //  return "ff";
     //}
 
-    @PostMapping(Endpoints.DELETE_TASKS)
+    @PostMapping("/MultipleForm")
     public String deleteTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                              @RequestBody String ids,
+                              @RequestParam(name = "task_checkbox") String[] ids,
                               Model model) {
-        String[] stringIds = ids.split(",");
-
-        for (String currentId : stringIds) {
+int a = 5;
+        for (String currentId : ids) {
             try {
                 taskService.deleteTaskById(UUID.fromString(currentId));
             } catch (DeleteTaskException e) {
@@ -197,8 +210,17 @@ public class MainController {
                 return ErrorPages.NOT_FOUND;
             }
         }
+        try {
+            Thread.sleep(700);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
+
+
+
+
 
     @PostMapping(Endpoints.SEARCH_TASKS)
     public String searchTasks(@RequestParam(PathVariables.VALUE) String value,
@@ -219,27 +241,12 @@ public class MainController {
     }
 
     @PostMapping(value = Endpoints.SWAP_TASKS)
-    public String swapTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                            @RequestBody String params,
-                            Model model) {
-        try {
-            JsonNode jsonParams = new ObjectMapper().readTree(params);
-            String ids = jsonParams.get("ids").asText();
-            String[] stringIds = ids.split(",");
-            String journalIdForImport = jsonParams.get("journal_to").asText();
+    public String swapTasks(@RequestParam(name="task_checkbox") List<String> tasksIds,
+                            @RequestParam(name = "selected_journal") String journalId) {
 
-            UUID idJournalConverted = UUID.fromString(idJournal);
-            UUID journalIdForImportConverted = UUID.fromString(journalIdForImport);
 
-            for (int i = 0; i < stringIds.length; ++i) {
-                taskService.updateJournalIdInTasks(journalIdForImportConverted, stringIds[i]);
-            }
-            return String.format(PathTemplates.REDIRECT_TO_HOME, journalIdForImportConverted);
-        } catch (JsonProcessingException e) {
-            //model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
-            return ErrorPages.BAD_REQUEST;
-        }
-
+                taskService.updateJournalIdInTasks(journalId, tasksIds);
+            return String.format(PathTemplates.REDIRECT_TO_HOME, journalId);
 
     }
 
