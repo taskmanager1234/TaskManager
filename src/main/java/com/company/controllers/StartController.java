@@ -1,24 +1,19 @@
 package com.company.controllers;
 
 import com.company.constants.ErrorPages;
-import com.company.constants.PathTemplates;
-import com.company.exception.CreateTaskException;
 import com.company.exception.DeleteTaskException;
-import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.model.User;
 import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +31,7 @@ public class StartController {
         public static final String TASK_ID = "taskId";
     }
 
-    @GetMapping(value = "/home")
+    @GetMapping(value = "/home" , consumes = MediaType.ALL_VALUE)
     public String get(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = auth.getPrincipal();
@@ -79,39 +74,5 @@ public class StartController {
         return "redirect:/home";
     }
 
-//    @PostMapping("/MultipleForm")
-//    public String checkboxes(//@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-//            @RequestParam(name = "task_checkbox") String[] ids, Model model) {
-//        int a =5;
-//        for (String currentId : ids) {
-//            try {
-//                taskService.deleteTaskById(UUID.fromString(currentId));
-//            } catch (DeleteTaskException e) {
-//                model.addAttribute("message", e.getMessage());
-//                return ErrorPages.NOT_FOUND;
-//            }
-//        }
-//        return null;
-//        //return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
-//
-//
-//    }
-
-
-//    @PostMapping(value = "/home/{journalId}/addJournal")
-//    public String createTask(@PathVariable UUID journalId) {
-//        TasksJournal task = new TasksJournal(journalId);
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Object principal = auth.getPrincipal();
-//        UUID id = ((User) (principal)).getId();
-//        try {
-//            task.setTasksJournal(taskJournalService.getById(journalIdReduced));
-//            taskJournalService.create(task);
-//        } catch (CreateTaskException e) {
-//            return ErrorPages.BAD_REQUEST;
-//        }
-//        //scheduler.scheduleTask(task);
-//        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
-//    }
 
 }

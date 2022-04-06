@@ -30,10 +30,11 @@
     </table>
 <p></p>
     <button style="float:left; margin-right: 2px" type ="submit">Update</button>
+    <a th:href="@{'/tasksJournal/'+${journalId}+'/task'}">
+        <button style="width: 59px">Cancel</button>
+    </a>
 </form>
-<a th:href="@{'/tasksJournal/'+${journalId}+'/task'}">
-      <button style="width: 59px">Cancel</button>
-</a>
+
 </body>
 </html>
 

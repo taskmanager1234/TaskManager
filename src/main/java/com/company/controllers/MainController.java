@@ -11,9 +11,6 @@ import com.company.model.TasksJournal;
 import com.company.service.SearchService;
 import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +29,8 @@ import java.util.UUID;
 @RequestMapping("/tasksJournal/{id}")
 public class MainController {
 
+
+
     private static class Endpoints {
         public static final String TASKS = "/tasks";
         public static final String ADD_TASK = "/addTask";
@@ -40,9 +38,9 @@ public class MainController {
         public static final String MAIN_PAGE = "/";
         public static final String UPDATE_TASK = "/updateTask/{taskId}";
         public static final String SHOW_TASK_UPDATE_FORM = "/updateTask/{taskId}";
-        public static final String DELETE_TASKS = "/deleteTasks";
         public static final String SEARCH_TASKS = "/searchTasks";
-        public static final String SWAP_TASKS = "/swapTasks";
+        public static final String MOVE_TASKS = "/moveTasks";
+        public static final String MULTIPLE_FORM = "/MultipleForm";
     }
 
     private static class ModelAttributes {
@@ -50,6 +48,8 @@ public class MainController {
         public static final String TASK = "task";
         public static final String NOT_FOUND_MESSAGE = "message";
         public static final String JOURNAL_ID = "journalId";
+        public static final String CONDITIONS = "conditions";
+        public static final String JOURNALS = "journals";
     }
 
     private static class PathVariables {
@@ -58,16 +58,15 @@ public class MainController {
         public static final String VALUE = "value";
         public static final String FIELD = "field";
         public static final String SEARCH_OPTION = "search_option";
+        public static final String TASK_CHECKBOX = "task_checkbox";
+        public static final String SELECTED_JOURNAL = "selected_journal";
+       // public static final String TASK_CHECKBOX = "task_checkbox";
 
     }
 
     public static class JsonKey {
         public static final String JOURNAL_ID_FOR_IMPORT = "journal_to";
         public static final String TASKS_SWAP = "ids";
-    }
-
-    public static class REGEX {
-        public static final String COMMA = ",";
     }
 
     private final TaskService taskService;
@@ -92,9 +91,11 @@ public class MainController {
         model.addAttribute(ModelAttributes.TASKS, tasksJournal.getTasks()); //в переменную tasks передаем 2 параметр
         List<TasksJournal> tasksJournals = taskJournalService.getJournals();
         model.addAttribute("journals", tasksJournals);
+
+        model.addAttribute("conditions", SearchService.Condition.values());
+        //model.addAttribute("fiedls", SearchService.Field.values());
         return PathTemplates.TASKS;
     }
-
 
     @GetMapping(value = Endpoints.SHOW_TASK_CREATION_FORM)
     public String showTaskCreateForm(Model model, @PathVariable String id) {
@@ -173,7 +174,6 @@ public class MainController {
         task.setStartDate(startDate);
         task.setEndDate(endDate);
 
-        // JournalStorage.getInstance().getTasksJournal().updateTaskByID(taskId, task);
 
         taskService.update(task);
 
@@ -181,27 +181,12 @@ public class MainController {
     }
 
 
-    // @PostMapping(Endpoints.DELETE_TASKS)
-    // public String deleteTasksPost(@RequestParam(value = "checkbox") String[] checkboxes, Model model) {
-//        UUID taskIdNew = UUID.fromString(taskId);
-//        // JournalStorage.getInstance().getTasksJournal().removeTask(taskId);
-//
-//        try {
-//            taskService.deleteTaskById(taskIdNew);
-//        } catch (DeleteTaskException e) {
-//            model.addAttribute(ModelAttributes.NOT_FOUND_MESSAGE, e.getMessage());
-//            return ErrorPages.NOT_FOUND;
-//        }
-//        return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
-    //int a = 5;
-    //  return "ff";
-    //}
 
-    @PostMapping("/MultipleForm")
+    @PostMapping(Endpoints.MULTIPLE_FORM)
     public String deleteTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                              @RequestParam(name = "task_checkbox") String[] ids,
+                              @RequestParam(name = PathVariables.TASK_CHECKBOX) String[] ids,
                               Model model) {
-int a = 5;
+
         for (String currentId : ids) {
             try {
                 taskService.deleteTaskById(UUID.fromString(currentId));
@@ -210,16 +195,9 @@ int a = 5;
                 return ErrorPages.NOT_FOUND;
             }
         }
-        try {
-            Thread.sleep(700);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         return String.format(PathTemplates.REDIRECT_TO_HOME, idJournal);
     }
-
-
-
 
 
     @PostMapping(Endpoints.SEARCH_TASKS)
@@ -236,19 +214,21 @@ int a = 5;
         tasks = searchService.searchTasksByCriterion(criterion, value, idJournal1);
 
         model.addAttribute(ModelAttributes.TASKS, tasks);
+        model.addAttribute(ModelAttributes.CONDITIONS, SearchService.Condition.values());
+        List<TasksJournal> tasksJournals = taskJournalService.getJournals();
+        model.addAttribute(ModelAttributes.JOURNALS, tasksJournals);
+        model.addAttribute(ModelAttributes.JOURNAL_ID, idJournal);
         return PathTemplates.TASKS;
 
     }
 
-    @PostMapping(value = Endpoints.SWAP_TASKS)
-    public String swapTasks(@RequestParam(name="task_checkbox") List<String> tasksIds,
-                            @RequestParam(name = "selected_journal") String journalId) {
+    @PostMapping(value = Endpoints.MOVE_TASKS)
+    public String swapTasks(@RequestParam(name = PathVariables.TASK_CHECKBOX) List<String> tasksIds,
+                            @RequestParam(name = PathVariables.SELECTED_JOURNAL) String journalId) {
 
-
-                taskService.updateJournalIdInTasks(journalId, tasksIds);
-            return String.format(PathTemplates.REDIRECT_TO_HOME, journalId);
+        taskService.updateJournalIdInTasks(journalId, tasksIds);
+        return String.format(PathTemplates.REDIRECT_TO_HOME, journalId);
 
     }
-
 
 }

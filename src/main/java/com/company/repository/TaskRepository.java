@@ -80,14 +80,11 @@ public class TaskRepository {
     public List<Task> getTasksByCondition(SearchService.Criterion criterion, String value, UUID journalId) {
 
 
-        if (criterion.getCondition().equals(Condition.CONTAINS) || criterion.getCondition().equals(Condition.NOT_CONTAINS))
-            value = "%" + value + "%";
-
         String query = "select task.* from task where " + criterion.getCriterionString();
 
         return (List<Task>) entityManager.createNativeQuery(
                 query, Task.class)
-                .setParameter(QueryParameters.VALUE, value)
+                .setParameter(QueryParameters.VALUE, criterion.getPreparedValue(value))
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
 
     }

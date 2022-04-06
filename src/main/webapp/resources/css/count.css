@@ -1,0 +1,21 @@
+.demotable {
+    border-collapse: collapse;
+    counter-reset: schetchik;
+}
+.demotable tbody tr {
+    counter-increment: schetchik;  /* сосчитать только tr в tbody */
+}
+.demotable td,
+.demotable tbody tr:before {
+    padding: .1em .5em;
+    border: 1px solid #E7D5C0;
+}
+.demotable tbody tr:before {
+    display: table-cell;
+    vertical-align: middle;
+}
+.demotable tbody tr:before,
+.demotable b:after {
+    content: counter(schetchik);
+    color: #978777;
+}

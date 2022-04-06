@@ -8,12 +8,16 @@
 <h1> Create Journal</h1>
 <form th:action="@{'/tasksJournal/addJournal'}" method="post">
     <table>
-        <tr> <td><b>Title</b></td></tr>
-        <tr> <td><input type="text" name="title" placeholder="Введите имя журнала"></td></tr>
+        <tr>
+            <td><b>Title</b></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="title" placeholder="Введите имя журнала"></td>
+        </tr>
     </table>
 
     <p></p>
-    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >Add</button>
+    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit" class="btn btn-outline-dark">Add</button>
 
 </form>
 <a th:href="@{'/home'}">

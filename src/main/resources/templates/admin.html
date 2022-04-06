@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      lang="en"><head>
+      lang="en">
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title></title>
 </head>
 <body>
-<div>
-    <table cellspacing="2" border="1" cellpadding="5" >
-        <tr>
-        <td>Username</td>
-<!--        <td>Password</td>-->
-        <td>Roles</td>
-            <td>Delete</td>
-        </tr>
-
-
-        <tr data-th-each="user : ${allUsers}">
-            <td data-th-text="${user.username}"></td>
-<!--            <td data-th-text="${user.password}"></td>-->
-        <td>
-            <table>
-                <tr data-th-each="role : ${user.roles}">
-                    <td data-th-text="${role.name}"></td>
-                    </tr>
-            </table>
-        </td>
-               <td>
-          <form th:action="@{'/admin/'+${user.id}}" method="post">
-              <button type="submit" value="delete" onclick="clickHandler()"/>
-              Delete</button>
-          </form>
-      </td>
+    <div>
+        <table cellspacing="2" border="1" cellpadding="5">
+            <tr>
+                <td>Username</td>
+                <!--        <td>Password</td>-->
+                <td>Roles</td>
+                <td>Delete</td>
             </tr>
-    </table>
-    <a th:href="@{'/home'}">
-        <button style="width: 59px">Cancel</button>
-    </a>
+
+
+            <tr data-th-each="user : ${allUsers}">
+                <td data-th-text="${user.username}"></td>
+                <!--            <td data-th-text="${user.password}"></td>-->
+                <td>
+                    <table>
+                        <tr data-th-each="role : ${user.roles}">
+                            <td data-th-text="${role.name}"></td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <form th:action="@{'/admin/'+${user.id}}" method="post">
+                        <button type="submit" value="delete" onclick="clickHandler()"/>
+                        Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <a th:href="@{'/home'}">
+            <button style="width: 59px">Cancel</button>
+        </a>
 
 </body>
 </html>

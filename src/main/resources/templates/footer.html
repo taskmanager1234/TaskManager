@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+    <div th:fragment="logout_fragm" sec:authorize="isAuthenticated()">
+        <h4>
+            <a href="/logout">Выйти</a>
+        </h4>
+    </div>
+</body>
+</html>

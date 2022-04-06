@@ -1,80 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      lang="en"><head>
+      lang="en">
+<!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <link href="/resources/css/count.css" rel="stylesheet"> -->
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title></title>
+    <title class="test"></title>
+      <link href="/resources/css/css1.css" rel="stylesheet">
 </head>
 <body>
-
-<h1><div sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">Welcome User</div></h1>
-<h1><div sec:authorize="hasRole('ROLE_ADMIN')">Welcome Admin</div></h1>
+<h1>
+    <div class="test" sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">Welcome User</div>
+</h1>
+<h1>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">Welcome Admin</div>
+</h1>
 <div sec:authorize="hasRole('ROLE_ADMIN')">
     <a th:href="@{/admin}">Посмотреть всех пользователей</a>
 </div>
 
 
 <div>
+
     <br>
     <table border="1" cellspacing="5" cellpadding="10">
         <tr>
-            <td></td>
-            <td><b>Journal name</b></td>
+            <td ></td>
+            <td ><b>Journal name</b></td>
         </tr>
         <tr data-th-each="journal : ${journals}">
 
             <td><input type="checkbox" th:id="${journal.getId().toString()}" name="task_checkbox"></td>
 
-            <td > <a th:href="@{'/tasksJournal/'+${journal.getId().toString()}+'/tasks'}" data-th-text="${journal.getJournalName()}"> </a></td>
+            <td><a th:href="@{'/tasksJournal/'+${journal.getId().toString()}+'/tasks'}"
+                   data-th-text="${journal.getJournalName()}"> </a></td>
         </tr>
     </table>
 </div>
 
+
 <br><a th:href="@{'/tasksJournal/addJournal'}">
-    <button  style="float:left" type="button">Create Journal</button>
+    <button style="float:left" type="button">Create Journal</button>
 </a>
 
 <form onsubmit="return false;">
-<div>
-    <script th:inline="javascript">
-        function getCheckedTasks() {
-            if(!window.confirm('Do you really want to delete selected tasks?'))
-                return false;
-            let result = new Array();
-            let rows = new Array();
-            let checkboxes = document.getElementsByName("task_checkbox");
-            let size = checkboxes.length;
-            for(let i = 0; i < size; ++i){
-                if(checkboxes[i].checked === true){
-                    let currentId = checkboxes.item(i).getAttribute("id");
-                    result.push(currentId);
-                    rows.push(checkboxes.item(i).parentNode.parentNode)
+    <div>
+        <script th:inline="javascript">
+            function getCheckedTasks() {
+                if (!window.confirm('Do you really want to delete selected tasks?'))
+                    return false;
+                let result = new Array();
+                let rows = new Array();
+                let checkboxes = document.getElementsByName("task_checkbox");
+                let size = checkboxes.length;
+                for (let i = 0; i < size; ++i) {
+                    if (checkboxes[i].checked === true) {
+                        let currentId = checkboxes.item(i).getAttribute("id");
+                        result.push(currentId);
+                        rows.push(checkboxes.item(i).parentNode.parentNode)
+                    }
                 }
-            }
-            let parent = rows[0].parentNode;
-            let resultStr = result[0];
-            for(let i = 1; i< result.length; ++i){
-                resultStr = resultStr.concat(',',result[i]);
-            }
-            let rowsCount = rows.length;
-            for(let i = 0; i < rowsCount; ++i){
-                parent.removeChild(rows[i]);
-            }
+                let parent = rows[0].parentNode;
+                let resultStr = result[0];
+                for (let i = 1; i < result.length; ++i) {
+                    resultStr = resultStr.concat(',', result[i]);
+                }
+                let rowsCount = rows.length;
+                for (let i = 0; i < rowsCount; ++i) {
+                    parent.removeChild(rows[i]);
+                }
 
-            let xhr = new XMLHttpRequest();
-            let endpoint = "/tasksJournal/deleteJournal";
-            xhr.open("POST", endpoint);
-            xhr.send(resultStr);
-        }
-    </script>
-    <button value="Delete" style="float:left; margin-left:2px" th:onclick="getCheckedTasks()"/>
-    Delete Journal</button>
+                let xhr = new XMLHttpRequest();
+                let endpoint = "/tasksJournal/deleteJournal";
+                xhr.open("POST", endpoint);
+                xhr.send(resultStr);
+            }
+        </script>
+        <button value="Delete" style="float:left; margin-left:2px" th:onclick="getCheckedTasks()"/>
+        Delete Journal</button>
 
-</div>
+    </div>
 </form>
-<br> <div sec:authorize="isAuthenticated()">
-    <h4><a href="/logout">Выйти</a></h4>
-</div>
+<br>
+
+
+<div th:insert="~{footer :: logout_fragm}"></div>
+
+<!--<p th:utext="${home}">Welcome to our grocery store!</p>-->
+
 <!--&lt;!&ndash;isAuthenticated() - вывод инфы для аутенф пользователей &ndash;&gt;-->
 <!--<div sec:authorize="isAuthenticated()">-->
 <!--    Text visible only to authenticated users.-->

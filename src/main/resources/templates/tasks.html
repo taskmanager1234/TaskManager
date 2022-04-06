@@ -1,91 +1,120 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<h1>Task Journal</h1>
-<form th:action="@{'/tasksJournal/'+${id}+'/searchTasks'}" method="post">
-    <table>
-        <tr>
-            <div>
-            <td>
-                <b style="float:left">Search by title</b>
-            </td>
-<!--        <tr><td><b>Value</b></td></tr>-->
-<!--        <tr><td><input type="text" name="value" placeholder="Название поля"></td></tr>-->
-<!--        <tr>-->
-            <td><select name="search_option">
-                <option name="equals">equals</option>
-                <option name="contains">contains</option>
-                <option name="not contains">not contains</option>
-            </select></td>
-            <td>
-                <input type="text" name="value" placeholder="Введите название таски">
-            </td>
-            </div>
-        </tr>
-                <tr><td><b>Field</b></td></tr>
-                <tr><td><input type="text" name="field" placeholder="Название поля"></td></tr>
+    <h1>Task Journal</h1>
+    <form th:action="@{'/tasksJournal/'+${id}+'/searchTasks'}" method="post">
+        <table>
+
+            <tr>
+                <div>
+                    <td>
+                        <b style="float:left">Search by title</b>
+                    </td>
+                    <td>
+                        <select name="search_option">
+                            <option data-th-each="condition: ${conditions}" th:text="${condition.name}"
+                                    th:value="${condition.name()}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="value" placeholder="Введите название таски">
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <td><b>Field</b></td>
+            </tr>
+            <tr>
+                <select name="search_option">
+                    <option data-th-each="field: ${#fields}" th:text="${field}"
+                            th:value="${condition.name()}"></option>
+                </select>
+                <td><input type="text" name="field" placeholder="Название поля"></td>
+            </tr>
+            <tr>
+            <tr>
+                <td>
+                    <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"
+                            class="btn btn-outline-dark">Search
+                    </button>
+                </td>
+
+            </tr>
+        </table>
+
+    </form>
+
+    <form th:action="@{'/tasksJournal/'+${id}+'/moveTasks'}" onsubmit="return validate_form()" method="post">
+        <table id="tasks"
+               border="1" cellspacing="5" cellpadding="10">
+            <caption style="font-size: 18px">Tasks</caption>
+            <tr>
+                <td></td>
+                <td><b>Title</b></td>
+            </tr>
+
+            <script type="text/javascript">
+                function validate_form() {
+                    valid = true;
+
+                    if ($('input[type=checkbox]:checked').length == 0) {
+                        alert("ERROR! Please select at least one checkbox");
+                        valid = false;
+                    }
+
+                    return valid;
+                }
+            </script>
+
+            <tr data-th-each="task : ${tasks}">
+
+                <td><input type="checkbox" th:value="${task.getId().toString()}" name="task_checkbox"></td>
+
+                <td><a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}"
+                       data-th-text="${task.getTitle()}"> </a></td>
+            </tr>
+        </table>
+
+        <section>
+            <h1></h1>
+        </section>
+
+        <div>
+            <input style="width: 57.5px; margin-right: 3px; float:left"
+                   th:formaction="@{/tasksJournal/{id}/MultipleForm (id = ${id})}" type="submit" name="btn_submit"
+                   value="Delete">
+        </div>
+
+        <a th:href="@{'/tasksJournal/'+${journalId}+'/addTask/'}">
+            <button style="width: 92px" type="button">Create Task</button>
+        </a>
+        <a th:href="@{'/home'}">
+            <button type="button" style="width: 59px">Cancel</button>
+        </a>
+        <form th:action="@{'/tasksJournal/'+${id}+'/moveTasks'}" method="post">
+            <table>
                 <tr>
-        <tr>
-            <td>
-                <button style="width: 57.5px; margin-right: 2px; float:left" type="submit"  class="btn btn-outline-dark" >Search</button>
-            </td>
+                    <td>Select a journal to move:</td>
+                    <td>
+                        <select style="" name="selected_journal" id="journal_id">
+                            <option value="0">select journal</option>
 
-        </tr>
-    </table>
-
-</form>
-
-<form th:action="@{'/tasksJournal/'+${id}+'/swapTasks'}" method="post">
-<table id="tasks"
-        border="1" cellspacing="5" cellpadding="10">
-    <tr>
-        <td></td>
-        <td><b>Title</b></td>
-       <!-- <td><b>Actions</b></td>-->
-    </tr>
-    <tr data-th-each="task : ${tasks}">
-
-        <td><input type="checkbox" th:value="${task.getId().toString()}" name="task_checkbox"></td>
-
-        <td > <a th:href="@{'/tasksJournal/'+${journalId}+'/updateTask/'+ ${task.getId().toString()}}" data-th-text="${task.getTitle()}"> </a></td>
-    </tr>
-</table>
-
-<section>
-    <h1></h1>
-</section>
-
-<div>
-    <input style="width: 57.5px; margin-right: 3px; float:left" th:formaction="@{/tasksJournal/{id}/MultipleForm (id = ${id})}" type="submit" name="btn_submit"  value="Delete" >
-</div>
-
-
-
-<a th:href="@{'/tasksJournal/'+${journalId}+'/addTask/'}">
-    <button style="width: 92px" type="button">Create Task</button>
-</a>
-<a th:href="@{'/home'}">
-    <button style="width: 59px">Cancel</button>
-</a>
-    <form th:action="@{'/tasksJournal/'+${id}+'/swapTasks'}" method="post">
-<table>
-    <tr>
-        <td>Select a journal to move:</td>
-        <td>
-            <select style="" name="selected_journal" id="journal_id">
-                <option value="0">select journal</option>
-                <option data-th-each="journal: ${journals}" th:text="${journal.getJournalName()}" th:value="${journal.getId().toString()}"></option>
-            </select>
-        </td>
-        <td>
-            <input type="submit"  value="Swap" >
-        </td>
-    </tr>
-</table>
-</form>
+                            <option data-th-each="journal: ${journals}" th:text="${journal.getJournalName()}"
+                                    th:value="${journal.getId().toString()}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="submit" value="Move" id="checkBtn">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </form>
 </body>
 </html>
