@@ -31,6 +31,7 @@ public class StartController {
         public static final String TASK_ID = "taskId";
     }
 
+    //todo: согласованные имена
     @GetMapping(value = "/home" , consumes = MediaType.ALL_VALUE)
     public String get(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -59,6 +60,7 @@ public class StartController {
         return "home";
     }
 
+    //todo: переделать но новые рельсы
     @PostMapping("/tasksJournal/deleteJournal")
     public String deleteTasks(@RequestBody String ids,
                               Model model) {

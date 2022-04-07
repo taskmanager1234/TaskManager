@@ -25,6 +25,7 @@ public class RegistrationController {
         return "registration";
     }
 
+    //todo: почему переменная типа User называется userForm?
     @PostMapping("/registration")
     public String addUser(@ModelAttribute("userData")  User userForm, BindingResult bindingResult, Model model) {
 

@@ -30,9 +30,11 @@ import java.util.UUID;
 public class MainController {
 
 
-
+    //todo: полагаю, эти классы так же стоит вынести отдельно и сделать публичными
     private static class Endpoints {
         public static final String TASKS = "/tasks";
+        //todo: зачем две одинаковые константы? Так же константа должена в названии передавать то, чем она является.
+        // ADD_TASK_URL - нормальное имя для константы. SHOW_TASK_CREATION_FORM - плохое, потому что константа ничего не показывает, ее имя не может быьть глаголом.
         public static final String ADD_TASK = "/addTask";
         public static final String SHOW_TASK_CREATION_FORM = "/addTask";
         public static final String MAIN_PAGE = "/";
@@ -80,6 +82,7 @@ public class MainController {
         this.searchService = searchService;
     }
 
+    //todo: аналогично - согласованные имена, убрать не используемое, константы
     @GetMapping(value = Endpoints.TASKS)
     public String showTaskManager(Authentication authentication, @PathVariable UUID id, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -118,6 +121,8 @@ public class MainController {
             task.setTasksJournal(taskJournalService.getById(journalIdReduced));
             taskService.create(task);
         } catch (CreateTaskException e) {
+            //todo: протестировать сценарий, когда какие-то параметры не заполнены или заполнены не верно.
+            // Ожидаемое поведение: пользователю отобразится страница ошибки с четким и понятным сообщением об ошибке
             return ErrorPages.BAD_REQUEST;
         }
         model.addAttribute("journal_id", journalIdReduced);
@@ -208,6 +213,7 @@ public class MainController {
                               Model model) {
         UUID idJournal1 = UUID.fromString(idJournal);
         List<Task> tasks;
+        //todo: нет контроля входящих значений - если например передать в field 'sadff' - запрос упадет
         SearchService.Field field1 = SearchService.Field.valueOf(field.toUpperCase());
         SearchService.Condition condition = SearchService.Condition.valueOf(searchOption.toUpperCase());
         SearchService.Criterion criterion = new SearchService.Criterion(field1, condition);
@@ -222,6 +228,7 @@ public class MainController {
 
     }
 
+    //todo: согласованные названия
     @PostMapping(value = Endpoints.MOVE_TASKS)
     public String swapTasks(@RequestParam(name = PathVariables.TASK_CHECKBOX) List<String> tasksIds,
                             @RequestParam(name = PathVariables.SELECTED_JOURNAL) String journalId) {

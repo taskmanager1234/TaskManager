@@ -31,6 +31,7 @@ public class UserRepository implements UserDetailsService {
                     .setParameter("name", username).getSingleResult();
             return user;
         } catch (NoResultException e) {
+            //todo: вот в таком случае стоит помечать метод @Nullable, чтобы явно сигнализировать, что метод может вернуть null и это ожидаемое поведение, а не ошибка
             return null;
         }
     }
@@ -72,6 +73,7 @@ public class UserRepository implements UserDetailsService {
         }
     }
 
+    //todo: не надо держать в коде не нужные методы
     public int size() {
         return (int) entityManager.createNativeQuery("SELECT count(*) FROM user", Integer.class).getSingleResult();
     }

@@ -46,6 +46,7 @@ public class SearchService {
 
         public String getCriterionString() {
 
+            //todo: лучше использовать строки с плейсхолдерами, чем конкатенацию
             return "task." + field.toString() + " " + condition.toString() + " :value and task.journal_id = :journal_id";
         }
 
@@ -73,6 +74,7 @@ public class SearchService {
             return this.name;
         }
 
+        //todo а зачем нужен этот метод?
         public List<String> getValues() {
             List<String> fieldString = new ArrayList<>();
 
@@ -86,6 +88,7 @@ public class SearchService {
     }
 
 
+    //todo эээ, а почему они дублируются? И почему у них такие разнородные названия?
     public enum Condition {
         EQUALS("="),
         CONTAINS("LIKE"),

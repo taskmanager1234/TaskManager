@@ -15,6 +15,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    //todo привести имена эндпоинтов, имена страниц и имена методов в соответствие. Устранить ллитералы в коде. Удалить не используемые и закомменченные блоки кода.
     @GetMapping("/admin")
     public String userList(Model model) {
         model.addAttribute("allUsers", userService.allUsers());

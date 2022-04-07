@@ -49,6 +49,7 @@ public class TaskService {
     public void deleteTaskById(UUID id) throws DeleteTaskException {
         Task task = taskRepository.findById(id);
         if (Objects.isNull(task))
+            //todo: это точно корректное поведение - выбрасывать ошибку при попытке удалить объект, которого нет?
             throw new DeleteTaskException("No such task found with id" + id);
         taskRepository.delete(task);
     }

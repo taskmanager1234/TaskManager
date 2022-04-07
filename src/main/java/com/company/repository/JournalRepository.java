@@ -32,6 +32,7 @@ public class JournalRepository {
     public List<TasksJournal> getJournalsByUserId(UUID userId) {
         String query = String.format("select * from task_journal where user_id = :%s",
                 QueryParameters.USER_ID);
+        //todo: почему не используешь createNamedQuery и TypedQuery? С ними код чище
         return (List<TasksJournal>) entityManager.createNativeQuery(query, TasksJournal.class)
                 .setParameter(QueryParameters.USER_ID, userId.toString()).getResultList();
     }
