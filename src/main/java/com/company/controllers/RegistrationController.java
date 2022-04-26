@@ -1,5 +1,7 @@
 package com.company.controllers;
 
+import com.company.constants.PathTemplates;
+import com.company.constants.TaskManagerConstants;
 import com.company.model.User;
 import com.company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,33 +17,40 @@ import java.util.UUID;
 @Controller
 public class RegistrationController {
 
+
+    private static class ATTRIBUTE_NAME {
+        public static final String USER_DATA = "userData";
+        public static final String PASSWORD_ERROR = "passwordError";
+        public static final String USERNAME_ERROR = "usernameError";
+    }
+
+
     @Autowired
     private UserService userService;
 
-    @GetMapping("/registration")
+    @GetMapping(TaskManagerConstants.REGISTRATION_URL)
     public String registration(Model model) {
-        model.addAttribute("userData", new User());
+        model.addAttribute(ATTRIBUTE_NAME.USER_DATA, new User());
 
-        return "registration";
+        return PathTemplates.REGISTRATION;
     }
 
-    //todo: почему переменная типа User называется userForm?
-    @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userData")  User userForm, BindingResult bindingResult, Model model) {
+    @PostMapping(TaskManagerConstants.REGISTRATION_URL)
+    public String registrationUser(@ModelAttribute(ATTRIBUTE_NAME.USER_DATA) User user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return PathTemplates.REGISTRATION;
         }
-        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
-            model.addAttribute("passwordError", "Пароли не совпадают");
-            return "registration";
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
+            model.addAttribute(ATTRIBUTE_NAME.PASSWORD_ERROR, "Пароли не совпадают");
+            return PathTemplates.REGISTRATION;
         }
-        userForm.setId(UUID.randomUUID());
-        if (!userService.saveUser(userForm)){
-            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
-            return "registration";
+        user.setId(UUID.randomUUID());
+        if (!userService.saveUser(user)) {
+            model.addAttribute(ATTRIBUTE_NAME.USERNAME_ERROR, "Пользователь с таким именем уже существует");
+            return PathTemplates.REGISTRATION;
         }
 
-        return "redirect:/login";
+        return PathTemplates.REDIRECT_LOGIN;
     }
 }

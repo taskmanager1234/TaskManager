@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+
+    <link href="/resources/css/button.css" rel="stylesheet">
+</head>
 <body>
     <div th:fragment="logout_fragm" sec:authorize="isAuthenticated()">
         <h4>
-            <a href="/logout">Выйти</a>
+            <a href="/logout" class="button_log btn btn-light btn-outline-dark">Log out</a>
         </h4>
     </div>
 </body>

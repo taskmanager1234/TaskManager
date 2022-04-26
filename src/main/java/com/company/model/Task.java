@@ -9,14 +9,30 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+
+@NamedQueries({
+        @NamedQuery(
+                name = "findById",
+                query = "from Task t where t.id = :id"
+        ),
+        @NamedQuery(
+                name= "getTaskByTaskId",
+                query = "from Task t where t.id = :task_id"
+        ),
+//        @NamedQuery(
+//                name="updateJournalIdInTasks",
+//                query="update Task set tasksJournal.id = :id where Task.id in (:ids)"
+//        )
+}
+)
 
 @Entity
 @Table(name = Tables.TASK, schema = DataBaseSchemes.SCHEMA, catalog = DataBaseCatalogs.CATALOG)
@@ -42,6 +58,7 @@ public class Task implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN, timezone = TIMEZONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startDate;
 
     @Basic
@@ -49,12 +66,14 @@ public class Task implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN, timezone = TIMEZONE)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endDate;
 
     @Basic
     @Column(name = ColumnNames.REMINDER_COLUMN, nullable = true)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime reminder;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -62,8 +81,8 @@ public class Task implements Serializable {
     private TasksJournal tasksJournal;
 
 
-
     public Task() {
+        int a = 5;
     }
 
     public Task(String title, String description, LocalDateTime startDate, LocalDateTime endDate) {
@@ -82,14 +101,14 @@ public class Task implements Serializable {
         this.id = id;
     }
 
-//    public Task(UUID id, String title, String description, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime reminder) {
-//        this.id = id;
-//        this.title = title;
-//        this.description = description;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.reminder = reminder;
-//    }
+    public Task(UUID id, String title, String description, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime reminder) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reminder = reminder;
+    }
 
 
     public UUID getId() {
@@ -121,6 +140,7 @@ public class Task implements Serializable {
         return reminder;
     }
 
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -130,6 +150,7 @@ public class Task implements Serializable {
     }
 
     public void setDescription(String description) {
+
         this.description = description;
     }
 

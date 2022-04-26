@@ -1,9 +1,6 @@
 package com.company.repository;
 
-import com.company.model.Task;
 import com.company.model.TasksJournal;
-import com.company.model.User;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +12,15 @@ import java.util.UUID;
 @Repository
 public class JournalRepository {
 
+
     @Autowired
     private EntityManager entityManager;
 
     private static class QueryParameters {
-        public static final String ID = "id";
-        public static final String TASK_JOURNAL_ID = "journal_id";
         public static final String USER_ID = "user_id";
+    }
+    private static class NamedQuery{
+        public static final String JOURNALS_USER = "getJournalsByUserId";
     }
 
     public TasksJournal findById(UUID id) {
@@ -30,21 +29,15 @@ public class JournalRepository {
 
     @SuppressWarnings("unchecked")
     public List<TasksJournal> getJournalsByUserId(UUID userId) {
-        String query = String.format("select * from task_journal where user_id = :%s",
-                QueryParameters.USER_ID);
         //todo: почему не используешь createNamedQuery и TypedQuery? С ними код чище
-        return (List<TasksJournal>) entityManager.createNativeQuery(query, TasksJournal.class)
-                .setParameter(QueryParameters.USER_ID, userId.toString()).getResultList();
+        return (List<TasksJournal>) entityManager.createNamedQuery(NamedQuery.JOURNALS_USER)
+                .setParameter(QueryParameters.USER_ID, userId)
+                .getResultList();
     }
 
-
-    //    public TasksJournal findById(UUID id) {
-//        return (TasksJournal) entityManager.createQuery("SELECT t FROM TasksJournal t WHERE t.id = :id").setParameter("id", id).getSingleResult();
-//
-//    }
     @SuppressWarnings("unchecked")
-    public List<TasksJournal> getJournals(){
-       return entityManager.createNativeQuery("select * from task_journal", TasksJournal.class).getResultList();
+    public List<TasksJournal> getJournals() {
+        return entityManager.createNamedQuery("getJournals").getResultList();
     }
 
     @Transactional

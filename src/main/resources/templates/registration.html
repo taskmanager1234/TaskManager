@@ -4,55 +4,58 @@
 <head></head>
 
 <body class="hold-transition register-page">
-<h1>Registration</h1>
-<div class="register-box">
-    <div class="card">
-        <div class="card-body register-card-body">
-<!--            <p class="login-box-msg">Register a new account</p>-->
-            <form action="#"  th:action="@{/registration}" th:object="${userData}" method="post">
-                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                    <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-                </div>
+    <h1>Registration</h1>
+    <div class="register-box">
+        <div class="card">
+            <div class="card-body register-card-body">
+                <!--            <p class="login-box-msg">Register a new account</p>-->
+                <form action="#" th:action="@{/registration}" th:object="${userData}" method="post">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                    </div>
 
-                <div class="input-group mb-3">
-                    <table>
-                    <tr>
-                    <td>User name:</td>
-                    <td><input type="text" class="form-control" th:field="*{username}" placeholder="User name"  th:errorclass="is-invalid"></td>
-                    </tr>
+                    <div class="input-group mb-3">
+                        <table>
+                            <tr>
+                                <td>User name:</td>
+                                <td><input type="text" class="form-control" th:field="*{username}"
+                                           placeholder="User name" th:errorclass="is-invalid"></td>
+                            </tr>
+                            <div class="input-group-append">
+                                <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                            </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" class="form-control" th:field="*{password}"
+                                       placeholder="Password" th:errorclass="is-invalid"></td>
+                        </tr>
                         <div class="input-group-append">
-                        <div class="input-group-text"> <span class="fas fa-envelope"></span> </div>
+                            <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group mb-3">
-                    <tr>
-                    <td>Password:</td>
-                    <td><input type="password" class="form-control" th:field="*{password}"  placeholder="Password" th:errorclass="is-invalid"></td>
-                    </tr>
-                    <div class="input-group-append">
-                        <div class="input-group-text"> <span class="fas fa-lock"></span> </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <tr>
-                    <td>Retype password:</td>
-                    <td> <input type="password" class="form-control" th:field="*{passwordConfirm}" placeholder="Retype password"></td>
-                    </tr>
-                     </table>
+                    <div class="input-group mb-3">
+                        <tr>
+                            <td>Retype password:</td>
+                            <td><input type="password" class="form-control" th:field="*{passwordConfirm}"
+                                       placeholder="Retype password"></td>
+                        </tr>
+                        </table>
                         <div class="input-group-append">
-                        <div class="input-group-text"> <span class="fas fa-lock"></span> </div>
+                            <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                        </div>
                     </div>
-                </div>
-            <button style="float: left; margin-right: 2px" type="submit">Register</button>
-            </form>
+                    <button class="btn_reg" type="submit">Register</button>
+                </form>
+            </div>
+            <!-- /.form-box -->
         </div>
-        <!-- /.form-box -->
+        <!-- /.card -->
     </div>
-    <!-- /.card -->
-</div>
-<a th:href="@{'/login'}">
-    <button style="width: 65.8px">Cancel </button>
-</a>
+    <a th:href="@{'/login'}">
+        <button class="btn_reg_width">Cancel</button>
+    </a>
 </body>
 
 </html>

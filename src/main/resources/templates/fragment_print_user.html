@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<body>
+    <div th:fragment="user_fragm" sec:authorize="isAuthenticated()">
+        <h4>
+            <div  class="button_text_user btn btn-light">Current user:</div>
+            <div  class="button_user btn btn-light" sec:authentication="name"></div>
+        </h4>
+    </div>
+</body>
+</html>
+</html>

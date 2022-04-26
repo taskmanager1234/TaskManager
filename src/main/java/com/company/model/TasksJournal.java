@@ -7,6 +7,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+
+@NamedQueries({
+        @NamedQuery(
+                name = "getJournalsByUserId",
+                query = "from TasksJournal tj where tj.user.id = :user_id"
+                ),
+        @NamedQuery(
+                name="getJournals",
+                query = "from TasksJournal "
+        )
+}
+)
 @Entity
 @Table(name = "task_journal", schema = "public", catalog = "postgres")
 public class TasksJournal implements Serializable {

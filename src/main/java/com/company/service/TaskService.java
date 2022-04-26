@@ -1,7 +1,6 @@
 package com.company.service;
 
 import com.company.exception.CreateTaskException;
-import com.company.exception.DeleteTaskException;
 import com.company.exception.TaskNotFoundException;
 import com.company.model.Task;
 import com.company.repository.TaskRepository;
@@ -14,7 +13,8 @@ import java.util.UUID;
 
 @Service
 public class TaskService {
-   private final TaskRepository taskRepository;
+
+    private final TaskRepository taskRepository;
 
     @Autowired
     public TaskService(TaskRepository taskRepository) {
@@ -22,10 +22,10 @@ public class TaskService {
     }
 
     public Task getById(UUID id) throws TaskNotFoundException {
-      Task task = taskRepository.findById(id);
-      if(Objects.isNull(task))
-          throw new TaskNotFoundException("No such task found with id" + id);
-      return task;
+        Task task = taskRepository.findById(id);
+        if (Objects.isNull(task))
+            throw new TaskNotFoundException("No such task found with id" + id);
+        return task;
     }
 
     public void create(Task task) throws CreateTaskException {
@@ -34,29 +34,27 @@ public class TaskService {
         taskRepository.create(task);
     }
 
-    public void updateJournalIdInTasks(String journalIdForMoveTasks, List<String> ids){
+    public void updateJournalIdInTasks(String journalIdForMoveTasks, List<String> ids) {
         taskRepository.updateJournalIdInTasks(journalIdForMoveTasks, ids);
     }
 
-    public void delete(Task task)  {
+    public void delete(Task task) {
         taskRepository.delete(task);
     }
 
-    public void update(Task task)  {
+    public void update(Task task) {
         taskRepository.update(task);
     }
 
-    public void deleteTaskById(UUID id) throws DeleteTaskException {
+    public void deleteTaskById(UUID id) {
         Task task = taskRepository.findById(id);
-        if (Objects.isNull(task))
-            //todo: это точно корректное поведение - выбрасывать ошибку при попытке удалить объект, которого нет?
-            throw new DeleteTaskException("No such task found with id" + id);
         taskRepository.delete(task);
     }
 
-    public Task getByIdAndByJournalId(UUID taskId, UUID journalId) {
-      return taskRepository.getTaskByTaskId(taskId);
+    public Task getByIdAndByJournalId(UUID taskId) {
+        return taskRepository.getTaskByTaskId(taskId);
     }
+
 
 
 

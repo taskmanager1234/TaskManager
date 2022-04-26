@@ -1,6 +1,5 @@
 package com.company.service;
 
-import com.company.exception.CreateTaskException;
 import com.company.exception.DeleteTaskException;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
@@ -24,12 +23,6 @@ public class TaskJournalService {
     public TasksJournal getById(UUID id) {
 
         TasksJournal tasksJournal = journalRepository.findById(id);
-//        List<Task> tasksByJournalId = taskRepository.getTasksByJournalId(id);
-//        for (Task currentTask : tasksByJournalId) {
-//         //   currentTask.setTasksJournalId(tasksJournal);
-//            tasksJournal.addTask(currentTask);
-   //     }
-
         return tasksJournal;
     }
 

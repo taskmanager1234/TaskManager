@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta name="robots" content="noindex,nofollow">
     <meta charset="utf-8">
@@ -17,6 +17,7 @@
 <div class="container">
     <h1>500</h1>
     <h2>Обнаружена внутренняя ошибка сервера</h2>
+    <h3><div   th:text="${error_message}" ></div></h3>
     <h4>Обратитесь в службу поддержки</h4>
     <p class="box_in"><a href="/">Перейти на главную страницу</a></p>
 </div>
