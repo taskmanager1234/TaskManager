@@ -26,7 +26,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(TaskManagerConstants.ADMIN_URL)
+    @GetMapping(TaskManagerConstants.ADMIN_URL)//TODO rename url
     public String getUsers(Model model) {
         model.addAttribute(ATTRIBUTE_NAME.ALL_USERS, userService.allUsers());
         return PathTemplates.ADMIN;

@@ -5,6 +5,7 @@ import com.company.constants.DataBaseCatalogs;
 import com.company.constants.DataBaseSchemes;
 import com.company.constants.Tables;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -24,7 +25,7 @@ import java.util.UUID;
                 query = "from Task t where t.id = :id"
         ),
         @NamedQuery(
-                name= "getTaskByTaskId",
+                name = "getTaskByTaskId",
                 query = "from Task t where t.id = :task_id"
         ),
 //        @NamedQuery(
@@ -165,6 +166,11 @@ public class Task implements Serializable {
     public void setReminder(LocalDateTime reminder) {
         this.reminder = reminder;
     }
+
+    public void setTaskJournal(TasksJournal taskJournal) {
+        this.tasksJournal = taskJournal;
+    }
+
 
     @Override
     public String toString() {

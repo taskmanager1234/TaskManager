@@ -1,6 +1,9 @@
 package com.company.model;
 
 import com.company.exception.NoSuchTaskException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -19,6 +22,8 @@ import java.util.*;
         )
 }
 )
+
+
 @Entity
 @Table(name = "task_journal", schema = "public", catalog = "postgres")
 public class TasksJournal implements Serializable {
@@ -30,6 +35,7 @@ public class TasksJournal implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "journal_id")
+    @JsonIgnore
     private List<Task> tasks;
 
     public User getUser() {
@@ -42,6 +48,7 @@ public class TasksJournal implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",columnDefinition = "varchar(40)")
+    @JsonIgnore
     private User user;
 
     public String getJournalName() {

@@ -12,5 +12,6 @@ public class PathTemplates {
     public static final String REDIRECT_HOME = "redirect:/home";
     public static final String HOME = "home";
     public static final String CREATE_JOURNAL = "createJournal";
+    public static final String IMPORT = "import";
 
 }

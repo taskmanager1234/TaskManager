@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Import</title>
+</head>
+<body>
+    <form enctype="multipart/form-data" th:action="@{/importTasks}" method="post">
+        <p><b>Mode import</b></p>
+        <p><input name="mode" type="radio" value="ignore"> Ignore</p>
+        <p><input name="mode" type="radio" value="replace" checked> Replace</p>
+        <p><input type="file" name="file"></p>
+        <p><input style="float:left" type="submit" value="Input"></p>
+    </form>
+</body>
+</html>

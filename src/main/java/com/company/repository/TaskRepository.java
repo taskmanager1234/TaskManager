@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
@@ -25,9 +26,13 @@ public class TaskRepository {
     private EntityManager entityManager;
 
     public Task findById(UUID id) {
-        return (Task) entityManager.createNamedQuery("findById")
-                .setParameter(QueryParameters.ID, id).getSingleResult();
-    }
+        try {
+            return (Task) entityManager.createNamedQuery("findById") //TODO приведение
+                    .setParameter(QueryParameters.ID, id).getSingleResult();
+        } catch(NoResultException e){
+            return null;
+        }
+    }//TODO дублирование метода
 
     @Transactional
     public void create(Task task) {

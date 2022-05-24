@@ -22,8 +22,7 @@ public class TaskJournalService {
 
     public TasksJournal getById(UUID id) {
 
-        TasksJournal tasksJournal = journalRepository.findById(id);
-        return tasksJournal;
+        return journalRepository.findById(id);
     }
 
 

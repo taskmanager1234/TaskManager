@@ -1,10 +1,12 @@
 package com.company.serializer.impl;
 
 import com.company.exception.SerializationException;
+import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.serializer.Serializer;
 
 import java.io.*;
+import java.util.List;
 
 public class BytesSerializer implements Serializer {
 
@@ -33,5 +35,10 @@ public class BytesSerializer implements Serializer {
         } catch (IOException e) {
             throw new SerializationException("Cannot deserialize object! Failed to create byte array", e);
         }
+    }
+
+    @Override
+    public List<Task> deserializeTasks(Object o) throws SerializationException {
+        return null;
     }
 }

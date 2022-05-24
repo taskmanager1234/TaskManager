@@ -10,18 +10,20 @@ import com.company.model.TasksJournal;
 import com.company.service.SearchService;
 import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
+import com.company.service.import_export.ExportService;
+import com.company.service.import_export.ImportService;
 import com.company.service.utils.Condition;
 import com.company.service.utils.Field;
-import com.company.validator.impl.TaskValidator;
 import com.company.validator.ValidationError;
+import com.company.validator.impl.TaskValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -47,12 +49,18 @@ public class MainController {
     private final TaskService taskService;
     private final TaskJournalService taskJournalService;
     private final SearchService searchService;
+    private final ImportService importService;
+    private final ExportService exportService;
 
     @Autowired
-    public MainController(TaskService taskService, TaskJournalService taskJournalService, SearchService searchService) {
+    public MainController(TaskService taskService, TaskJournalService taskJournalService,
+                          SearchService searchService, ImportService importService, ExportService exportService) {
         this.taskService = taskService;
         this.taskJournalService = taskJournalService;
         this.searchService = searchService;
+        this.importService = importService;
+        this.exportService = exportService;
+
     }
 
 
@@ -66,7 +74,7 @@ public class MainController {
         List<TasksJournal> tasksJournals = taskJournalService.getJournals();
         model.addAttribute(AttributeName.JOURNALS, tasksJournals);
 
-        model.addAttribute(AttributeName.CONDITIONS, Condition.stringValues());
+        model.addAttribute(AttributeName.CONDITIONS, Condition.stringValues()); //TODO Condition.values()
         model.addAttribute(PathVariables.FIELDS, Field.stringValues());
         return PathTemplates.TASKS;
     }
@@ -81,13 +89,8 @@ public class MainController {
     @PostMapping(value = TaskManagerConstants.CREATE_TASK_URL)
     public String createTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                              Task task,
-//                             @RequestParam String title,
-//                             @RequestParam String description,
-//                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-//                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
                              Model model
     ) {
-        //Task task = new Task(title, description, startDate, endDate);
         UUID journalIdReduced = UUID.fromString(idJournal);
         UUID taskId = UUID.randomUUID();
         task.setId(taskId);
@@ -99,8 +102,6 @@ public class MainController {
             task.setTasksJournal(taskJournalService.getById(journalIdReduced));
             taskService.create(task);
         } catch (CreateTaskException e) {
-            //todo: протестировать сценарий, когда какие-то параметры не заполнены или заполнены не верно.
-            // Ожидаемое поведение: пользователю отобразится страница ошибки с четким и понятным сообщением об ошибке
             return showErrorPage(ErrorPages.INTERNAL_SERVER_ERROR, model, e.getMessage());
         } catch (ValidationException e) {
             return showErrorPage(ErrorPages.BAD_REQUEST, model, e.getMessage());
@@ -111,12 +112,12 @@ public class MainController {
     }
 
 
-    @GetMapping(value = TaskManagerConstants.MAIN_PAGE_URL)
+    @GetMapping(value = TaskManagerConstants.MAIN_PAGE_URL) //TODO придерживаться одной терминологии
     public String getStartPage() {
         return PathTemplates.REDIRECT_TO_HOME;
-    }
+    } //TODO redirect
 
-    @GetMapping(TaskManagerConstants.SHOW_TASK_UPDATE_FORM_URL)
+    @GetMapping(TaskManagerConstants.TASK_UPDATE_FORM_URL)
     public String getTaskUpdateForm(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                                     @PathVariable(name = PathVariables.TASK_ID) String taskId,
                                     Model model) {
@@ -143,10 +144,6 @@ public class MainController {
     public String updateTask(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
                              @PathVariable(name = PathVariables.TASK_ID) String taskIdString,
                              Task taskNew,
-//                             @RequestParam String title,
-//                             @RequestParam String description,
-//                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-//                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
                              Model model
     ) {
         UUID taskId = UUID.fromString(taskIdString);
@@ -165,9 +162,9 @@ public class MainController {
     }
 
 
-    @PostMapping(TaskManagerConstants.MULTIPLE_FORM_URL)
+    @PostMapping(TaskManagerConstants.MULTIPLE_FORM_URL)//TODO
     public String deleteTasks(@PathVariable(name = PathVariables.JOURNAL_ID) String idJournal,
-                              @RequestParam(name = PathVariables.TASK_CHECKBOX) String[] tasksIds
+                              @RequestParam(name = PathVariables.TASK_CHECKBOX) String[] tasksIds//TODO Task_checkbox
     ) {
 
         for (String currentId : tasksIds) {
@@ -210,9 +207,13 @@ public class MainController {
 
     }
 
-    private String showErrorPage(String page, Model model, String errors) {
+    private String showErrorPage(String page, Model model, String errors) {//TODO добавляет ошибки в модель, сделать void
         model.addAttribute(AttributeName.ERROR_MESSAGE, errors);
         return page;
     }
+
+
+
+
 
 }

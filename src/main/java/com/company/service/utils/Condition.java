@@ -11,7 +11,8 @@ public enum Condition {
     NOT_CONTAINS("Not contains"),
     STARTS_WITH("Starts with");
 
-    private final String condition;
+    private final String condition;//TODO name
+    //TODO добавить поле для condition("=", "LIKE'....)
 
     Condition(String condition) {
         this.condition = condition;
@@ -28,7 +29,7 @@ public enum Condition {
         }
         return conditions;
     }
-
+//TODO
     public static Map<Condition, String> getMapping() {
         Map<Condition, String> result = new HashMap<>();
         result.put(EQUALS, "=");

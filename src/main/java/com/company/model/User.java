@@ -1,6 +1,7 @@
 package com.company.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,6 +54,7 @@ public class User implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER )
     @JoinColumn(name = "user_id", columnDefinition = "varchar(40)")
+    @JsonIgnore
     private List<TasksJournal> tasksJournals;
 
 

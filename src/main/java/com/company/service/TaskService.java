@@ -46,8 +46,15 @@ public class TaskService {
         taskRepository.update(task);
     }
 
+    public void update(UUID idJournal){
+
+    }
+
     public void deleteTaskById(UUID id) {
         Task task = taskRepository.findById(id);
+        if(Objects.isNull(task)){
+            return;
+        }
         taskRepository.delete(task);
     }
 

@@ -30,14 +30,14 @@ public class JournalRepository {
     @SuppressWarnings("unchecked")
     public List<TasksJournal> getJournalsByUserId(UUID userId) {
         //todo: почему не используешь createNamedQuery и TypedQuery? С ними код чище
-        return (List<TasksJournal>) entityManager.createNamedQuery(NamedQuery.JOURNALS_USER)
+        return entityManager.createNamedQuery(NamedQuery.JOURNALS_USER, TasksJournal.class)
                 .setParameter(QueryParameters.USER_ID, userId)
                 .getResultList();
     }
 
     @SuppressWarnings("unchecked")
     public List<TasksJournal> getJournals() {
-        return entityManager.createNamedQuery("getJournals").getResultList();
+        return entityManager.createNamedQuery("getJournals").getResultList();//TODO
     }
 
     @Transactional

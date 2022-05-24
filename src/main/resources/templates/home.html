@@ -56,9 +56,15 @@
         </div>
 
         <script src="/resources/js/validate.js" type="text/javascript"></script>
+
+
     </form>
     <br>
+
     <div th:insert="~{fragment_log_out :: logout_fragm}"></div>
     <a th:insert="~{fragment_print_user :: user_fragm}"></a>
+    <a th:href="@{'/importTasks'}">
+        <button type="button" class="button_import btn btn-light btn-outline-dark">Import</button>
+    </a>
 </body>
 </html>

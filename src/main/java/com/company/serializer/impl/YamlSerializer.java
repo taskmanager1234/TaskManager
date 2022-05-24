@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-public class YamlSerializer implements Serializer {
+public class YamlSerializer {
 
 
     public Object serializeBeauty(TasksJournal o) throws SerializationException {

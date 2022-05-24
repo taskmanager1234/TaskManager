@@ -10,6 +10,18 @@
     right: 10px;
 }
 
+.button_import {
+    line-height: 20px;
+    width: 94px;
+    font-size: 13pt;
+    font-family: tahoma;
+    margin-top: 6px;
+    margin-right: auto;
+    position: absolute;
+    top: 6px;
+    right: 505px;
+}
+
 .button_user {
     line-height: 21px;
     display: inline-block;

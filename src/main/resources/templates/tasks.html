@@ -34,7 +34,7 @@
                             <select class="form-select" aria-label="Default select example" name="search_option"
                                     id="validationDefault03" required>
                                 <option selected disabled value="">Select criterion</option>
-                                <option data-th-each="condition: ${conditions}" th:text="${condition}"
+                                <option data-th-each="condition: ${conditions}" th:text="${condition}">
                                         th:value="${condition}"></option>
                             </select>
                         </td>
@@ -73,7 +73,6 @@
 
             <script src="/resources/js/validate.js" type="text/javascript"></script>
 
-
             <tr data-th-each="task : ${tasks}">
 
                 <td><input class="form-check-input" type="checkbox" th:value="${task.getId().toString()}"
@@ -96,6 +95,7 @@
                    value="Delete">
         </div>
 
+
         <a th:href="@{'/tasksJournal/'+${journalId}+'/createTask/'}">
             <button class="btn btn-light button_margin  btn-md" type="button">Create Task</button>
         </a>
@@ -104,6 +104,25 @@
             <button type="button" class="btn btn-light button_margin  btn-md">Cancel</button>
             <br><br>
         </a>
+
+        <div>
+            <table>
+                <tr>
+                    <td>Select extension:</td>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" name="extension" >
+                            <option value="json">json</option>
+                            <option value="xml">xml</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input class="btn btn-secondary" th:formaction="@{/export}"
+                               type="submit" value="Export" >
+                    </td>
+                </tr>
+            </table>
+        </div>
+
 <!--    </form>-->
     <form th:action="@{'/tasksJournal/'+${id}+'/moveTasks'}" onsubmit="return validate_form()" method="post">
         <table>
@@ -123,6 +142,8 @@
             </tr>
         </table>
     </form>
+
+
     </form>
 </body>
 </html>
