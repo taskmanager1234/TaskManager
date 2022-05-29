@@ -13,38 +13,48 @@
     <title></title>
 </head>
 <body>
+    <form th:action="@{/admin}" method="post">
     <div>
-        <table cellspacing="2" border="1" cellpadding="5">
+        <br>
+        <br>
+        <caption><h5 align="center">Users</h5></caption>
+        <table class="table table-bordered">
             <tr>
-                <td>Username</td>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
                 <!--        <td>Password</td>-->
-                <td>Roles</td>
-                <td>Delete</td>
+                <th scope="col">Roles</th>
             </tr>
 
 
             <tr data-th-each="user : ${allUsers}">
-                <td data-th-text="${user.username}"></td>
+                <td scope="row"><input class="form-check-input" type="checkbox" th:value="${user.getId().toString()}"
+                           name="user_checkbox"></td>
+
+                <td scope="row" data-th-text="${user.username}"></td>
                 <!--            <td data-th-text="${user.password}"></td>-->
                 <td>
                     <table>
                         <tr data-th-each="role : ${user.roles}">
-                            <td data-th-text="${role.name}"></td>
+                            <td scope="row" data-th-text="${role.name}"></td>
                         </tr>
                     </table>
                 </td>
-                <td>
-                    <form th:action="@{'/admin/'+${user.id}}" method="post">
-                        <button type="submit" value="delete" onclick="clickHandler()"/>
-                        Delete</button>
-                    </form>
-                </td>
+
             </tr>
         </table>
-        <a th:href="@{'/home'}">
-            <button class="btn_reg_width">Cancel</button>
-        </a>
-        <div th:insert="~{fragment_log_out :: logout_fragm}"></div>
-        <a th:insert="~{fragment_print_user :: user_fragm}"></a>
+    </div>
+        <div>
+            <input class="btn btn-light btn_reg btn-md"
+                   type="submit" name="btn_submit"
+                   value="Delete">
+        </div>
+    </form>
+    <a th:href="@{'/home'}">
+        <button class="btn btn-light button_margin  btn-md " >Cancel</button>
+    </a>
+
+    <div th:insert="~{fragment_log_out :: logout_fragm}"></div>
+    <a th:insert="~{fragment_print_user :: user_fragm}"></a>
 </body>
 </html>

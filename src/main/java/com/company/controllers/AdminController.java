@@ -6,10 +6,9 @@ import com.company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -33,9 +32,19 @@ public class AdminController {
     }
 
 
-    @PostMapping(TaskManagerConstants.USER_URL)
-    public String deleteUser(@PathVariable(name = PathVariables.USER_ID) UUID userId) {
-        userService.deleteUser(userId);
+//    @PostMapping(TaskManagerConstants.USER_URL)
+//    public String deleteUser(@PathVariable(name = PathVariables.USER_ID) UUID userId) {
+//
+//
+//        userService.deleteUser(userId);
+//        return PathTemplates.REDIRECT_TO_ADMIN;
+//    }
+
+    @PostMapping("/admin")
+    public String deleteUser(@RequestParam("user_checkbox") String[] userIds){
+                for(String currentId: userIds){
+                    userService.deleteUser(UUID.fromString(currentId));
+                }
         return PathTemplates.REDIRECT_TO_ADMIN;
     }
 
