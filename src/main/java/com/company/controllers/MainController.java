@@ -14,16 +14,14 @@ import com.company.service.import_export.ExportService;
 import com.company.service.import_export.ImportService;
 import com.company.service.utils.Condition;
 import com.company.service.utils.Field;
-import com.company.validator.ValidationError;
-import com.company.validator.impl.TaskValidator;
+import com.company.validator.ValidationReport;
+import com.company.validator.impl.TaskValidationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -95,10 +93,10 @@ public class MainController {
         UUID taskId = UUID.randomUUID();
         task.setId(taskId);
         try {
-            TaskValidator taskValidator = new TaskValidator();
-            ValidationError validationError = taskValidator.validate(task);
-            if (!validationError.isEmpty())
-                throw new ValidationException(validationError.getAllErrorsAsString());
+            TaskValidationManager taskValidationManager = new TaskValidationManager();
+            ValidationReport validationReport = taskValidationManager.validate(task);
+            if (!validationReport.isEmpty())
+                throw new ValidationException(validationReport.getAllErrorsAsString());
             task.setTasksJournal(taskJournalService.getById(journalIdReduced));
             taskService.create(task);
         } catch (CreateTaskException e) {

@@ -20,6 +20,7 @@ public class AdminController {
 
     private static class PathVariables {
         public static final String USER_ID = "userId";
+        public static final String USERS_CHECKBOX = "user_checkbox";
     }
 
     @Autowired
@@ -40,11 +41,11 @@ public class AdminController {
 //        return PathTemplates.REDIRECT_TO_ADMIN;
 //    }
 
-    @PostMapping("/admin")
-    public String deleteUser(@RequestParam("user_checkbox") String[] userIds){
-                for(String currentId: userIds){
-                    userService.deleteUser(UUID.fromString(currentId));
-                }
+    @PostMapping(TaskManagerConstants.ADMIN_URL)
+    public String deleteUser(@RequestParam(PathVariables.USERS_CHECKBOX) String[] userIds) {
+        for (String currentId : userIds) {
+            userService.deleteUser(UUID.fromString(currentId));
+        }
         return PathTemplates.REDIRECT_TO_ADMIN;
     }
 

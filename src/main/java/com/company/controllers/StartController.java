@@ -5,7 +5,6 @@ import com.company.constants.ErrorPages;
 import com.company.constants.PathTemplates;
 import com.company.constants.TaskManagerConstants;
 import com.company.exception.*;
-import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.model.User;
 import com.company.service.AuthenticationService;
@@ -13,22 +12,16 @@ import com.company.service.TaskJournalService;
 import com.company.service.TaskService;
 import com.company.service.import_export.ExportService;
 import com.company.service.import_export.ImportService;
-import com.company.validator.impl.ImportValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,21 +35,22 @@ public class StartController {
     private final ExportService exportService;
     private final ImportService importService;
     private final AuthenticationService authenticationService;
-    private final ImportValidator importValidator;
+    //private final ImportValidator importValidator;
 
     @Autowired
     public StartController(TaskJournalService taskJournalService,
                            TaskService taskService,
                            ExportService exportService,
                            ImportService importService,
-                           AuthenticationService authenticationService,
-                           ImportValidator importValidator) {
+                           AuthenticationService authenticationService
+//                           ImportValidator importValidator
+                           ) {
         this.taskJournalService = taskJournalService;
         this.taskService = taskService;
         this.exportService = exportService;
         this.importService = importService;
         this.authenticationService = authenticationService;
-        this.importValidator = importValidator;
+       // this.importValidator = importValidator;
     }
 
     private static class PathVariables {

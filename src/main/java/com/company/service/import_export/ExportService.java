@@ -20,7 +20,7 @@ import java.util.List;
 public class ExportService {
 
 
-
+//TODO rename format
     public ResponseEntity<InputStreamResource> exportTasks(List<Task> tasks, String extension) throws UnexpectedFileExtensionException, SerializationException {
 
         HttpHeaders header = new HttpHeaders();
@@ -34,7 +34,7 @@ public class ExportService {
             header.setContentType(MediaType.APPLICATION_XML);
         }
 
-        String tasksStr = tasks2String(tasks, extension);
+        String tasksStr = tasks2String(tasks, extension); //TODO tasksTo
         byte[] tasksBytes = tasksStr.getBytes();
         InputStream resource = new ByteArrayInputStream(tasksBytes);
 
@@ -45,10 +45,12 @@ public class ExportService {
                 .body(fileForDownload);
     }
 
-
+//TODO if-else заменить на switch
+    //TODO Serializer
+    //TODO метод для резолва (выбирает) Serializer
     public String tasks2String(List<Task> tasks, String extension) throws SerializationException, UnexpectedFileExtensionException {
         JsonSerializer jsonSerializer = new JsonSerializer();
-        XmlSerializer xmlSerializer = new XmlSerializer();
+        XmlSerializer xmlSerializer = new XmlSerializer(); //TODO singleton
         if (ExtensionConstants.XML.equals(extension)) {
             return (String) xmlSerializer.serializeTasks(tasks);
         } else if (ExtensionConstants.JSON.equals(extension)) {

@@ -36,7 +36,7 @@ public class JsonSerializer implements Serializer {
         }
         return json;
     }
-
+//TODO передаем DTO
     public Object serializeTasks(List<Task> tasks) throws SerializationException {
         ObjectMapper objectMapper = new ObjectMapper();
         String json;
