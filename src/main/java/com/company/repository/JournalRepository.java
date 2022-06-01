@@ -1,5 +1,6 @@
 package com.company.repository;
 
+import com.company.model.Task;
 import com.company.model.TasksJournal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -53,6 +54,13 @@ public class JournalRepository {
     @Transactional
     public void delete(TasksJournal tasksJournal) {
         entityManager.remove(tasksJournal);
+    }
+
+
+    @Transactional
+    public void setUserId(UUID idCurrentUser){
+        entityManager.createNativeQuery("UPDATE task_journal set user_id = :idCurrentUser where user_id = null", TasksJournal.class)
+                .setParameter("idCurrentUser", idCurrentUser).executeUpdate();
     }
 
 

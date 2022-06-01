@@ -7,7 +7,6 @@ import com.company.model.Task;
 import com.company.serializer.Serializer;
 import com.company.serializer.impl.JsonSerializer;
 import com.company.serializer.impl.XmlSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,11 +19,11 @@ public class ConverterFileService {
 
     public List<Task> getTasks(MultipartFile file) throws UnexpectedFileExtensionException, IOException, SerializationException {
         Serializer serializer = getSerializer(file);
-        String tasksString = convertFile2String(file);
-        return convertString2ListTasks(tasksString, serializer);
+        String tasksString = convertFileToString(file);
+        return convertStringToListTasks(tasksString, serializer);
     }
 
-    private String convertFile2String(MultipartFile file) throws IOException {
+    private String convertFileToString(MultipartFile file) throws IOException {
         String tasks = "";
         if (!file.isEmpty()) {
             byte[] bytes = file.getBytes();
@@ -33,7 +32,7 @@ public class ConverterFileService {
         return tasks;
     }
 
-    private List<Task> convertString2ListTasks(String tasks, Serializer serializer) throws SerializationException {
+    private List<Task> convertStringToListTasks(String tasks, Serializer serializer) throws SerializationException {
 
         return serializer.deserializeTasks(tasks);
     }

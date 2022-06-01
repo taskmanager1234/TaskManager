@@ -4,7 +4,9 @@ import com.company.exception.*;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
 import com.company.model.User;
+import com.company.repository.JournalRepository;
 import com.company.repository.TaskRepository;
+import com.company.repository.UserRepository;
 import com.company.service.AuthenticationService;
 import com.company.service.TaskService;
 import com.company.service.utils.ConverterFileService;
@@ -20,6 +22,10 @@ import java.util.UUID;
 @Service
 public class ImportService {
 
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    JournalRepository journalRepository;
 
     private final TaskService taskService;
     private final TaskRepository taskRepository;
@@ -72,11 +78,14 @@ public class ImportService {
                 String idJournalString = idJournal.toString();
                 taskService.getById(task.getId());
                 taskService.update(task);
+                UUID idCurrentUser = authenticationService.getCurrentUser().getId();
+
                 List<String> idTasks = new ArrayList<>();
                 for (int i = 0; i < tasks.size(); i++) {
                     idTasks.add(tasks.get(i).getId().toString());
                 }
                 taskRepository.updateJournalIdInTasks(idJournalString, idTasks);
+                //journalRepository.setUserId(idCurrentUser);
 
             } catch (TaskNotFoundException e) {
                 taskService.create(task);

@@ -90,4 +90,6 @@ public class TaskRepository {
                 .setParameter(QueryParameters.TASK_JOURNAL_ID, journalId.toString()).getResultList();
 
     }
+
+
 }

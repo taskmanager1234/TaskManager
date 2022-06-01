@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<User> usergtList(Long idMin) {
+    public List<User> userList(Long idMin) {
         return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
                 .setParameter("paramId", idMin).getResultList();
     }

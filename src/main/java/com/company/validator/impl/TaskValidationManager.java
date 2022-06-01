@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 
 public class TaskValidationManager implements ValidationManager<Task> {
 
-    private static final int TITLE_MAX_LENGTH = 32;
+    private static final int TITLE_MAX_LENGTH = 32;//TODO перенести в StringSizeValidator
     private static final int DESCRIPTION_MAX_LENGTH = 500;
 
-    public ValidationReport validate(Task task) throws ClassCastException {
+    public ValidationReport validate(Task task)  {
 
         ValidationReport validationReport = new ValidationReport();
 
@@ -22,6 +22,7 @@ public class TaskValidationManager implements ValidationManager<Task> {
         LocalDateTime startDate = task.getStartDate();
         LocalDateTime endDate = task.getEndDate();
 
+        //TODO цикл
         validationReport.addErrorIfPresent(DateValidator.validate(startDate, endDate));
         validationReport.addErrorIfPresent(StringSizeValidator.validate(description, DESCRIPTION_MAX_LENGTH));
         validationReport.addErrorIfPresent(StringSizeValidator.validate(title, TITLE_MAX_LENGTH));

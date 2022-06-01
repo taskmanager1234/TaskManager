@@ -8,5 +8,5 @@ import com.company.model.Task;
 import java.io.IOException;
 
 public interface Validator<T> {
-    ValidationError validate(T object) throws ClassCastException, UnexpectedFileExtensionException, IOException, SerializationException, TaskNotFoundException;
+    ValidationError validate(T object);
 }

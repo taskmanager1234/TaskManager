@@ -34,7 +34,7 @@ public class ExportService {
             header.setContentType(MediaType.APPLICATION_XML);
         }
 
-        String tasksStr = tasks2String(tasks, extension); //TODO tasksTo
+        String tasksStr = tasksToString(tasks, extension); //TODO tasksTo
         byte[] tasksBytes = tasksStr.getBytes();
         InputStream resource = new ByteArrayInputStream(tasksBytes);
 
@@ -48,7 +48,7 @@ public class ExportService {
 //TODO if-else заменить на switch
     //TODO Serializer
     //TODO метод для резолва (выбирает) Serializer
-    public String tasks2String(List<Task> tasks, String extension) throws SerializationException, UnexpectedFileExtensionException {
+    public String tasksToString(List<Task> tasks, String extension) throws SerializationException, UnexpectedFileExtensionException {
         JsonSerializer jsonSerializer = new JsonSerializer();
         XmlSerializer xmlSerializer = new XmlSerializer(); //TODO singleton
         if (ExtensionConstants.XML.equals(extension)) {
