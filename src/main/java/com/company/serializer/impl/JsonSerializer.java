@@ -55,11 +55,11 @@ public class JsonSerializer implements Serializer {
         return json;
     }
 
-    public Object serializeTasksDTO(JournalDto dto) throws SerializationException {
+    public Object serializeTasksDTO(JournalDto journalDto) throws SerializationException {
         ObjectMapper objectMapper = new ObjectMapper();
         String json;
         try {
-            json = objectMapper.writeValueAsString(dto);
+            json = objectMapper.writeValueAsString(journalDto);
         } catch (JsonProcessingException e) {
             throw new SerializationException("Cannot serialize object! Failed to get JSON string from Java object.", e);
         }

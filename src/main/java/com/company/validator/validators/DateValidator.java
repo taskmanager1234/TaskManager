@@ -1,16 +1,22 @@
 package com.company.validator.validators;
 
-import com.company.validator.ValidationError;
+import com.company.model.Task;
+import com.company.validator.ValidationException;
+import com.company.validator.Validator;
 
 import java.time.LocalDateTime;
 
 //TODO добавить интерфейс
 //TODO не статик
-public class DateValidator {
+public class DateValidator implements Validator<Task> {
 
-    public static ValidationError validate(LocalDateTime startDate, LocalDateTime endDate) {//TODO передаем Task (лучше T)
+    @Override
+    public void validate(Task task) throws ValidationException {//TODO передаем Task (лучше T)
+        LocalDateTime startDate = task.getStartDate();
+        LocalDateTime endDate = task.getEndDate();
         if (startDate.isAfter(endDate))
-            return new ValidationError("Start date must be before end date");
-        else return null;
+            throw  new ValidationException("Start date must be before end date");
     }
+
+
 }

@@ -4,10 +4,10 @@ package com.company.validator;
 import lombok.Data;
 //TODO ValidationException должен быть наследником от Exception
 @Data
-public class ValidationError {
+public class ValidationException extends Exception {
     private final String errorMessage;
 
-    public ValidationError(String errorMessage) {
+    public ValidationException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
