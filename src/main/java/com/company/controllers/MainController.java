@@ -205,7 +205,7 @@ public class MainController {
 
     }
 
-    private String showErrorPage(String page, Model model, String errors) {//TODO добавляет ошибки в модель, сделать void
+    private String showErrorPage(String page, Model model, String errors) {
         model.addAttribute(AttributeName.ERROR_MESSAGE, errors);
         return page;
     }

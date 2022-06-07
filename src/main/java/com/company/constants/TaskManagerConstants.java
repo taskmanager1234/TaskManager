@@ -12,8 +12,8 @@ public class TaskManagerConstants {
     public static final String ADMIN_URL = "/admin";
     public static final String USER_URL = "/admin/{userId}";
     public static final String REGISTRATION_URL = "/registration";
-    public static final String HOME_URL = "/home";
-    public static final String ADD_JOURNAL_URL = "/tasksJournal/addJournal";
+    public static final String JOURNALS_URL = "/home";
+    public static final String JOURNAL_CREATE_FORM_URL = "/tasksJournal/addJournal";
     public static final String DELETE_JOURNAL_URL = "/tasksJournal/deleteJournal";
     public static final String EXPORT_URL = "/export";
     public static final String IMPORT_URL = "/importTasks";

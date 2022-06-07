@@ -59,7 +59,7 @@ public class StartController {
         public static final String FILE = "file";
     }
 
-    @GetMapping(value = TaskManagerConstants.HOME_URL, consumes = MediaType.ALL_VALUE) //TODO JOURNALS_URL
+    @GetMapping(value = TaskManagerConstants.JOURNALS_URL, consumes = MediaType.ALL_VALUE) //TODO JOURNALS_URL
     //consumes - тип принимаемых данных, любой тип может быть принят данным endPoint
     public String getJournalsUser(Model model) {
         User currentUser = authenticationService.getCurrentUser();
@@ -68,12 +68,12 @@ public class StartController {
         return PathTemplates.HOME;
     }
 
-    @GetMapping(value = TaskManagerConstants.ADD_JOURNAL_URL)//TODO JOURNAL_CREATE_FORM_URL
+    @GetMapping(value = TaskManagerConstants.JOURNAL_CREATE_FORM_URL)//TODO JOURNAL_CREATE_FORM_URL
     public String showJournalCreateForm() {
         return PathTemplates.CREATE_JOURNAL;
     }//TODO
 
-    @PostMapping(value = TaskManagerConstants.ADD_JOURNAL_URL) //TODO
+    @PostMapping(value = TaskManagerConstants.JOURNAL_CREATE_FORM_URL) //TODO
     public String createJournal(@RequestParam(PathVariables.TITLE) String title, Model model) {
         TasksJournal tasksJournal = new TasksJournal(title);
 

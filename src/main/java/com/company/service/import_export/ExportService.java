@@ -4,6 +4,8 @@ import com.company.constants.ExtensionConstants;
 import com.company.exception.SerializationException;
 import com.company.exception.UnexpectedFileExtensionException;
 import com.company.model.Task;
+import com.company.model.TasksJournal;
+import com.company.serializer.JournalDto;
 import com.company.serializer.impl.JsonSerializer;
 import com.company.serializer.impl.XmlSerializer;
 import org.springframework.core.io.InputStreamResource;
@@ -51,10 +53,17 @@ public class ExportService {
     public String tasksToString(List<Task> tasks, String extension) throws SerializationException, UnexpectedFileExtensionException {
         JsonSerializer jsonSerializer = new JsonSerializer();
         XmlSerializer xmlSerializer = new XmlSerializer(); //TODO singleton
+
+        TasksJournal tasksJournal = tasks.get(0).getTasksJournal();
+        TasksJournal tasksJournalForDto = new TasksJournal();
+        tasksJournalForDto.setId(tasksJournal.getId());
+        tasksJournalForDto.setJournalName(tasksJournal.getJournalName());
+        tasksJournalForDto.setTasks(tasks);
+        JournalDto journalDto = new JournalDto(tasksJournalForDto);
         if (ExtensionConstants.XML.equals(extension)) {
             return (String) xmlSerializer.serializeTasks(tasks);
         } else if (ExtensionConstants.JSON.equals(extension)) {
-            return (String) jsonSerializer.serializeTasks(tasks);
+            return (String) jsonSerializer.serializeTasksDTO(journalDto);
         }
         throw new UnexpectedFileExtensionException("Failed to convert to string");
 

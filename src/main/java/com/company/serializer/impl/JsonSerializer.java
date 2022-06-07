@@ -4,15 +4,22 @@ package com.company.serializer.impl;
 import com.company.exception.SerializationException;
 import com.company.model.Task;
 import com.company.model.TasksJournal;
+import com.company.serializer.JournalDto;
 import com.company.serializer.Serializer;
+import com.company.utils.Mapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.UncheckedIOException;
 import java.util.List;
 
 public class JsonSerializer implements Serializer {
+
+    @Autowired
+    ModelMapper modelMapper;
 
 
     public Object serializeBeauty(TasksJournal o) throws SerializationException {
@@ -42,6 +49,17 @@ public class JsonSerializer implements Serializer {
         String json;
         try {
             json = objectMapper.writeValueAsString(tasks);
+        } catch (JsonProcessingException e) {
+            throw new SerializationException("Cannot serialize object! Failed to get JSON string from Java object.", e);
+        }
+        return json;
+    }
+
+    public Object serializeTasksDTO(JournalDto dto) throws SerializationException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json;
+        try {
+            json = objectMapper.writeValueAsString(dto);
         } catch (JsonProcessingException e) {
             throw new SerializationException("Cannot serialize object! Failed to get JSON string from Java object.", e);
         }

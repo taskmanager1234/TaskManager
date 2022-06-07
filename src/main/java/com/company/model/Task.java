@@ -5,6 +5,7 @@ import com.company.constants.DataBaseCatalogs;
 import com.company.constants.DataBaseSchemes;
 import com.company.constants.Tables;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -79,6 +80,7 @@ public class Task implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "journal_id")
+    @JsonIgnore
     private TasksJournal tasksJournal;
 
 
