@@ -3,6 +3,7 @@ package com.company;
 import com.company.exception.SerializationException;
 import com.company.helpers.ReaderFromFile;
 import com.company.model.TasksJournal;
+import com.company.serializer.Serializer;
 import com.company.serializer.impl.JsonSerializer;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -15,9 +16,9 @@ public class JournalLoader {
     public static TasksJournal getFromFile() throws SerializationException {
         try {
             String fileRead = ReaderFromFile.readAsText(filePath);
-            JsonSerializer jsonSerializer = new JsonSerializer();
+            Serializer<TasksJournal> jsonSerializer = new JsonSerializer<>();
             try {
-                return jsonSerializer.deserialize(fileRead);
+                return jsonSerializer.deserialize(fileRead, TasksJournal.class);
             } catch (SerializationException e) {
                 throw new SerializationException("Deserialization failed when starting the program! Failed to convert JSON string to Java object",e);
             }

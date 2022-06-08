@@ -9,7 +9,13 @@
     top: 6px;
     right: 10px;
 }
-
+.round {
+    border-radius: 50%;
+}
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+}
 .button_import {
     line-height: 20px;
     width: 94px;

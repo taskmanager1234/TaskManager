@@ -35,9 +35,8 @@ public class TasksJournal implements Serializable {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "journal_id")
-
     private List<Task> tasks;
 
     public User getUser() {

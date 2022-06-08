@@ -42,10 +42,15 @@ public class TaskRepository {
     @Transactional
     public void createAll(List<Task> tasks) {
         for (Task task : tasks) {
+            entityManager.merge(task);//TODO почему не persist
+        }
+    }
+    @Transactional
+    public void updateAll(List<Task> tasks) {
+        for (Task task : tasks) {
             entityManager.merge(task);
         }
     }
-
     @Transactional
     public void update(Task task) {
         entityManager.merge(task);

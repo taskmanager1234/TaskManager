@@ -55,6 +55,7 @@
     <a th:href="@{'/tasksJournal/'+${journalId}+'/tasks'}">
         <button class="btn btn-light button_margin  btn-md" >Cancel</button>
     </a>
+<!--    <a th:href="@{'/tasksJournal/'+${journalId}+'/tasks'}" class="previous round">&#8249;</a>-->
     <div th:insert="~{fragment_log_out :: logout_fragm}"></div>
     <a th:insert="~{fragment_print_user :: user_fragm}"></a>
 </body>

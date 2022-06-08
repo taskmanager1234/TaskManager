@@ -34,6 +34,10 @@ public class TaskService {
         taskRepository.create(task);
     }
 
+    public void updateAll(List<Task> tasks){
+        taskRepository.updateAll(tasks);
+    }
+
     public void updateJournalIdInTasks(String journalIdForMoveTasks, List<String> ids) {
         taskRepository.updateJournalIdInTasks(journalIdForMoveTasks, ids);
     }

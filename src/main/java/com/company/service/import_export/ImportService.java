@@ -71,27 +71,28 @@ public class ImportService {
         }
     }
 
-    private void importWithReplace(List<Task> tasks) throws CreateTaskException {
-        for (Task task : tasks) {
-            try {
-                UUID idJournal = task.getTasksJournal().getId();
-                String idJournalString = idJournal.toString();
-                taskService.getById(task.getId());
-                taskService.update(task);
-                UUID idCurrentUser = authenticationService.getCurrentUser().getId();
+    private void importWithReplace(List<Task> tasks)  {
+//        for (Task task : tasks) {
+////            try {
+////                UUID idJournal = task.getTasksJournal().getId();
+////                String idJournalString = idJournal.toString();
+////                taskService.getById(task.getId());
+////                taskService.update(task);
+////             //   UUID idCurrentUser = authenticationService.getCurrentUser().getId();
+////
+////                List<String> idTasks = new ArrayList<>();
+////                for (int i = 0; i < tasks.size(); i++) {
+////                    idTasks.add(tasks.get(i).getId().toString());
+////                }
+////                taskRepository.updateJournalIdInTasks(idJournalString, idTasks);
+////                //journalRepository.setUserId(idCurrentUser);
+////
+////            } catch (TaskNotFoundException e) {
+////                taskService.create(task);
+////            }
+////        }
 
-                List<String> idTasks = new ArrayList<>();
-                for (int i = 0; i < tasks.size(); i++) {
-                    idTasks.add(tasks.get(i).getId().toString());
-                }
-                taskRepository.updateJournalIdInTasks(idJournalString, idTasks);
-                //journalRepository.setUserId(idCurrentUser);
-
-            } catch (TaskNotFoundException e) {
-                taskService.create(task);
-
-            }
-        }
+        taskService.updateAll(tasks);
     }
 
 

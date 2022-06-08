@@ -4,6 +4,7 @@ package com.company.model;
 import com.company.constants.DataBaseCatalogs;
 import com.company.constants.DataBaseSchemes;
 import com.company.constants.Tables;
+import com.company.serializer.JournalDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -78,7 +79,7 @@ public class Task implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime reminder;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "journal_id")
     @JsonIgnore
     private TasksJournal tasksJournal;

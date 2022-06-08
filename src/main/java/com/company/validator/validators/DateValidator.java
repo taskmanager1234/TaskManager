@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class DateValidator implements Validator<Task> {
 
     @Override
-    public void validate(Task task) throws ValidationException {//TODO передаем Task (лучше T)
+    public void validate(Task task) throws ValidationException {//TODO передаем Task
         LocalDateTime startDate = task.getStartDate();
         LocalDateTime endDate = task.getEndDate();
         if (startDate.isAfter(endDate))

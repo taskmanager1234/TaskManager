@@ -2,7 +2,7 @@ package com.company.validator;
 
 
 import lombok.Data;
-//TODO ValidationException должен быть наследником от Exception
+
 @Data
 public class ValidationException extends Exception {
     private final String errorMessage;
@@ -12,7 +12,7 @@ public class ValidationException extends Exception {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return errorMessage;
     }
 
